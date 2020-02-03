@@ -95,6 +95,92 @@ Level <select  name="level" id="level" value="1" onchange="updatelevel()">
 <td><input id="healf" class="output" name="health" readonly></input></td>
 </tr>
 </table>
+<table style="margin-top:20px;">
+<tr><td colspan=3 class="hey"><h3>Part 2: Skills</h3></td></tr>
+<tr><td colspan=3 class="hey"><b>Initial Invested Skills</b></td></tr>
+
+  <tr><td colspan=3 class="hey">
+  Physicality Skills
+  </td></tr>
+<tr>
+<td>Fortitude :
+<br><button type="button" onclick="inskdo('for')">&darr;</button>
+  <p style="display:inline-block" id="natfor">0</p>  
+  <button type="button" onclick="inskup('for')">&uarr;</button></td>
+  <td>Struggle :
+<br><button type="button" onclick="inskdo('str')">&darr;</button>
+  <p style="display:inline-block" id="natstr">0</p>  
+  <button type="button" onclick="inskup('str')">&uarr;</button>
+  </td>
+  <td>Remaining : <p style="display:inline-block;" id="sk_phs">0</p></td>
+</tr>
+
+<tr><td colspan=3 class="hey">Cognition Skills</td></tr>
+<tr><td>Medicine :
+<br><button type="button" onclick="inskdo('med')">&darr;</button>
+  <p style="display:inline-block" id="natmed">0</p>  
+  <button type="button" onclick="inskup('med')">&uarr;</button></td>
+  
+  <td>Survival :
+<br><button type="button" onclick="inskdo('sur')">&darr;</button>
+  <p style="display:inline-block" id="natsur">0</p>  
+  <button type="button" onclick="inskup('sur')">&uarr;</button>
+  </td>
+  <td rowspan=2>Remaining : <p style="display:inline-block;" id="sk_cog">0</p></td>
+  </tr>
+  <tr><td>
+  Repair :
+<br><button type="button" onclick="inskdo('rep')">&darr;</button>
+  <p style="display:inline-block" id="natrep">0</p>  
+  <button type="button" onclick="inskup('rep')">&uarr;</button>
+
+  
+  </td>
+  
+  <td>
+  Investigate :
+  <br><button type="button" onclick="inskdo('inv')">&darr;</button>
+  <p style="display:inline-block" id="natinv">0</p>  
+  <button type="button" onclick="inskup('inv')">&uarr;</button>
+
+  </td></tr>
+
+  <tr><td colspan=3 class="hey">
+  Coordination Skills
+  </td></tr>
+<tr>
+<td>Hide :
+<br><button type="button" onclick="inskdo('hid')">&darr;</button>
+  <p style="display:inline-block" id="nathid">0</p>  
+  <button type="button" onclick="inskup('hid')">&uarr;</button></td>
+  <td>Sleight :
+<br><button type="button" onclick="inskdo('sle')">&darr;</button>
+  <p style="display:inline-block" id="natsle">0</p>  
+  <button type="button" onclick="inskup('sle')">&uarr;</button>
+  </td>
+  <td>Remaining : <p style="display:inline-block;" id="sk_cor">0</p></td>
+</tr>
+
+  <tr><td colspan=3 class="hey">
+  Charisma Skills
+  </td></tr>
+<tr>
+<td>Spellcraft :
+<br><button type="button" onclick="inskdo('spe')">&darr;</button>
+  <p style="display:inline-block" id="natspe">0</p>  
+  <button type="button" onclick="inskup('spe')">&uarr;</button></td>
+  <td>Speech :
+<br><button type="button" onclick="inskdo('spc')">&darr;</button>
+  <p style="display:inline-block" id="natspc">0</p>  
+  <button type="button" onclick="inskup('spc')">&uarr;</button>
+  </td>
+  <td>Remaining : <p style="display:inline-block;" id="sk_chr">0</p></td>
+</tr>
+
+
+
+
+</table>
 
 </form>
 </div></center>
