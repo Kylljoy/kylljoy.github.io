@@ -6,3 +6,6 @@ body{background:#ccc;}
 #subheader a {color:#fff;margin-left:10px;margin-right:10px;text-decoration:overline;font-family:"Share Tech Mono",monospace;text-align:center;}
 #content {margin:10px;border:#444 2px solid;background:#ddd;}
 .textbox {margin:5px;background-color:#000;color:#009900;border:#ffffff 1px solid;border-radius:3px;padding:5px;}
+.outbox {margin:5px;background-color:#000;color:#009900;border:#ffffff 1px solid;border-radius:3px;padding:5px;}
+.outbox a{color:#ffffff;text-decoration:underline;}
+.usage {margin:15px;background-color:#000;color:#999900;border:#ffffff 1px solid;border-radius:3px;padding:5px;}

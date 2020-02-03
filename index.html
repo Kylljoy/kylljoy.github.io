@@ -3,6 +3,7 @@
 <head>
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<script language="javascript" src="autostyle.js"></script>
 </head>
 <body onload="add_style()">
 <div id="headerbar">
@@ -11,11 +12,11 @@
 </div>
 <div id="subheader">
 <center>
-<a href="index.html">Home</a><a>Software</a><a>Hardware</a><a>Mathematics</a><a>Games</a><a>Miscellaneous</a><a>About</a>
+<a href="index.html">Home</a><a>Software</a><a>Hardware</a><a>Mathematics</a><a>Games</a><a href="misc.html">Miscellaneous</a><a>About</a>
 </center>
 </div>
 <div id="content">
-<center><H2>> HOME <</h2></center>
+<center><h2>> HOME <</h2></center>
 <hr>
 <center><h3>Now Annoucing : Killjoy, Inc.</h3></center>
 <div bxs="hello_world" class="textbox">Welcome aboard! This is Killjoy Inc. An (unfortunately) not real company started by a High Schooler. Nice to meet you, my name is Kyle, though I also go by Killjoy (Kylljoy), or Mrkldrky. I've been needing a place to dump (showcase) projects of mine and I think starting a github page would be the perfect place to do so. Ideally, I'd like to have either an actual webhosting service or (my dream) have a port-forwarded server either running off a single board system (Like a Pi or Chromebook), but both of those require cash, something I am a little strapped for at the moment. So unfortunately, PHP and SQL are no-goes, so this is a site entirely made through JS, CSS, and HTML. It's unfortunate, but I suppose we must all
@@ -24,18 +25,7 @@ make sacrifices in the name of bettering ourselves. <br><br> Anyways, this is wh
 <br><br>
 Yes, if I release executables, they will probably be .exe files because I don't currently have a working OSX development device. I may release source code alongside the project (C/C++) if re-compiling for OSX is neccessary.</div>
 </div>
-
+</div>
 </body>
-<script language="javascript">
-function add_style(){
-	var boxes= document.getElementsByClassName("textbox");
-	for(box=0;box<boxes.length;box++){
-		boxes[box].innerHTML="killjoy@desktop:~$ cat "+boxes[box].getAttribute("bxs")+".txt <br><br>"+boxes[box].innerHTML+"<br><br>killjoy@desktop:~$ ^C";
-	}
-
-}
-
-
-</script>
 </html>
 
