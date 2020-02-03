@@ -17,20 +17,41 @@ var sk_phs=0;
 var sk_cog=0;
 var sk_cor=0;
 var sk_chr=0;
-var med_init=0;
-var sur_init=0;
-var rep_init=0;
-var inv_init=0;
-var for_init=0;
-var str_init=0;
-var sle_init=0;
-var hid_init=0;
-var spe_init=0;
-var spc_init=0;
+var cls_tg="";
+var tg_other=[];
 
 
-var init_sks={"med":0,"sur":0,"inv":0,"rep":0,"for":0,"str":0,"hid":0,"sle":0,"hid":0,"spe":0,"spc":0};
+var sks_map={"med":"Medicine","sur":"Survival","inv":"Invesitgate","rep":"Repair","for":"Fortitude","str":"Struggle",
+"sle":"Sleight","hid":"Hide","spe":"Spellcraft","spc":"Speech",
+"int":"Intimidate","loc":"Lockpick","pic":"Pickpocket","spe1":"Speak First Language","spe2":"Speak Second Language",
+"spe3":"Speak Third Language","lk":"Local Knowledge","ak":"Arcane Knowledge","stl":"Stealth","sea":"Search",
+"sca":"Scavenge","rig":"Rig","cra":"Crafting","alc":"Alchemy"
+};
+
+var cls_sks=["int","loc","pic","spe1","spe2","spe3","lk","ak","stl","sea","sca","rig","cra","alc"];
+var cls_inv={};
+var cls_act=[];
+
+for(i=0;i<cls_sks.length;i++){
+		cls_inv[cls_sks[i]]=0;
+}
+
+
+
 var gen_sks=["med","sur","inv","rep","for","str","sle","hid","spe","spc"];
+var init_sks={};
+
+for(i=0;i<gen_sks.length;i++){
+		init_sks[gen_sks[i]]=0;
+}
+
+var rc_sks={};
+for(i=0;i<cls_sks.length;i++){
+		rc_sks[cls_sks[i]]=0;
+}
+for(i=0;i<gen_sks.length;i++){
+		rc_sks[gen_sks[i]]=0;
+}
 
 var tg_sks=[];
 
@@ -140,6 +161,7 @@ function updateclass(){
 			class_cor=2;
 			class_chr=2;
 			class_health=12;
+			cls_tg="for";
 			break;
 		case "mercenary":
 			class_phs=5;
@@ -147,6 +169,7 @@ function updateclass(){
 			class_cor=2;
 			class_chr=1;
 			class_health=10;
+			cls_tg="str";
 			break;
 		case "marksman":
 			class_phs=2;
@@ -154,6 +177,7 @@ function updateclass(){
 			class_cor=3;
 			class_chr=1;
 			class_health=6;
+			cls_tg="inv";
 			break;
 		case "assassin":
 			class_phs=3;
@@ -161,6 +185,7 @@ function updateclass(){
 			class_cor=5;
 			class_chr=1;
 			class_health=6;
+			cls_tg="hid";
 			break;
 		case "diplomat":
 			class_phs=1;
@@ -168,6 +193,7 @@ function updateclass(){
 			class_cor=2;
 			class_chr=5;
 			class_health=4;
+			cls_tg="spc";
 			break;
 		case "thief":
 			class_phs=2;
@@ -175,6 +201,7 @@ function updateclass(){
 			class_cor=3;
 			class_chr=3;
 			class_health=6;
+			cls_tg="sle";
 			break;
 		case "smith":
 			class_phs=3;
@@ -182,6 +209,7 @@ function updateclass(){
 			class_cor=3;
 			class_chr=1;
 			class_health=6;
+			cls_tg="rep";
 			break;
 		case "mage":
 			class_phs=1;
@@ -189,6 +217,7 @@ function updateclass(){
 			class_cor=2;
 			class_chr=4;
 			class_health=4;
+			cls_tg="spe";
 			break;
 		default:
 			class_phs=0;
@@ -196,13 +225,21 @@ function updateclass(){
 			class_cor=0;
 			class_chr=0;
 			class_health=6;
+			cls_tg="";
 	}
+			updatenatskills();
 		updatetags();
-		updatenatskills();
 	}
 
 
 function updaterace(){
+	for(i=0;i<cls_sks.length;i++){
+		rc_sks[cls_sks[i]]=0;
+	}
+	for(i=0;i<gen_sks.length;i++){
+		rc_sks[gen_sks[i]]=0;
+	}
+
 	race_chr=0;
 	race_cog=0;
 	race_health=0;
@@ -216,22 +253,50 @@ function updaterace(){
 		case "helf":
 			race_phs=-1;
 			race_cog=1;
+			rc_sks["spe1"]+=3;
+			rc_sks["ak"]+=2;
 		break;
 		case "welf":
 			race_phs=-1;
 			race_cor=1;
+			rc_sks["spe1"]+=3;
+			rc_sks["sur"]+=2;
 		break;
 		case "delf":
 			race_phs-1;
+			rc_sks["spe1"]+=3;
+			rc_sks["stl"]+=5;
 		break;
+		case "alf":
+			rc_sks["spe1"]+=3;
+			rc_sks["spe2"]+=2;
+			break;
 		case "hord":
+			race_phs=2;
+			rc_sks["spe1"]+=3;
+			rc_sks["spe2"]+=1;
+			rc_sks["sur"]+=2;
+			race_cog=-1;
+		break;
 		case "hodk":
+			race_phs=2;
+			rc_sks["stl"]+=2;
+			rc_sks["spe1"]+=3;
+			rc_sks["spe2"]+=1;
+			race_cog=-1;
+		break;
 		case "horm":
 			race_phs=2;
+			rc_sks["hid"]+=2;
+			rc_sks["spe1"]+=3;
+			rc_sks["spe2"]+=1;
 			race_cog=-1;
 		break;
 		case "durf":
 			race_health=2;
+			rc_sks["cra"]+=3;
+			rc_sks["rep"]+=2;
+			rc_sks["rig"]+=1;
 			race_cog=1;
 			race_phs=1;
 			race_cor=-2;
@@ -245,8 +310,8 @@ function updaterace(){
 		break;
 		
 	}
+			updatenatskills();
 		updatetags();
-		updatenatskills();
 }
 
 function updatenatskills(){
@@ -254,20 +319,38 @@ function updatenatskills(){
 	sk_cog=document.getElementById("cog").innerHTML;
 	sk_cor=document.getElementById("cor").innerHTML;
 	sk_chr=document.getElementById("chr").innerHTML;
-	med_init=0;
-	sur_init=0;
-	rep_init=0;
-	inv_init=0;
-	for_init=0;
-	str_init=0;
-	sle_init=0;
-	hid_init=0;
-	spe_init=0;
-	spc_init=0;
+	for(i=0;i<gen_sks.length;i++){
+		init_sks[gen_sks[i]]=0;
+	}
 	
 }
 
 function updatetags(){
+	
+	tg_sks=tg_other.slice();
+	tg_sks.push(cls_tg);
+	rc_values=[];
+	for(i=0;i<gen_sks.length;i++){
+		if(rc_sks[gen_sks[i]]>0){
+		rc_values.push(sks_map[gen_sks[i]]+" : "+rc_sks[gen_sks[i]]);
+		}
+	}
+	for(i=0;i<cls_sks.length;i++){
+		if(rc_sks[cls_sks[i]]>0){
+		rc_values.push(sks_map[cls_sks[i]]+" : "+rc_sks[cls_sks[i]]);
+		}
+	}
+	
+	document.getElementById("rc_sks").innerHTML="";
+	if(rc_values.length==0){
+		document.getElementById("rc_sks").innerHTML="<tr><td colspan='3'>( No Racial Skills )</td></tr>";
+	}
+	else{
+	for(i=0;i<rc_values.length;i+=3){
+		document.getElementById("rc_sks").innerHTML+="<tr><td>"+rc_values[i]+"</td><td>"+(rc_values[i+1]==undefined?"":rc_values[i+1])+"</td><td>"+(rc_values[i+2]==undefined?"":rc_values[i+2])+"</td></tr>";
+	}
+	}
+	
 	document.getElementById("phs").innerHTML=Math.max(class_phs+race_phs,0);
 	document.getElementById("cog").innerHTML=Math.max(class_cog+race_cog,0);
 	document.getElementById("cor").innerHTML=Math.max(class_cor+race_cor,0);
@@ -284,7 +367,7 @@ function updatetags(){
 	document.getElementById("chrf").value=Math.max(class_chr+race_chr,0)+chrpoints;
 	document.getElementById("healf").value=Math.max(class_health+race_health,0)+(2*(document.getElementById("level").value-1));
 	for(i=0;i<gen_sks.length;i++){
-		document.getElementById("nat"+gen_sks[i]).innerHTML=init_sks[gen_sks[i]]*(1+tg_sks.count("med"));
+		document.getElementById("nat"+gen_sks[i]).innerHTML=init_sks[gen_sks[i]]*(1+tg_sks.count(gen_sks[i]));
 	}
 
 	document.getElementById("sk_phs").innerHTML=sk_phs;
@@ -310,5 +393,4 @@ function allofthem(){
 	updateclass();
 	updaterace();
 	updatetags();
-	
 }
