@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<title>Sportsball! Character Generator</title>
+<head></head>
+<style>
+*{padding:0px;margin:0px;}
+body{background-color:#ffffcc}
+input{padding:2px;}
+table{width:100%;}
+td{padding:5px;border:#ddd solid 1px;}
+</style>
+<body>
+<script language="javascript" src="sbmaker-js.js">
+</script>
+<center><div style="padding:3px;background-color:#fff;margin:5px;border:1px solid #000;"><h1>The Official Sportsball! Character Generator</h1></div></center>
+
+<center><div style="padding:3px;background-color:#fff;margin:15px;border:1px solid #000;">
+<form method="get">
+<h3>Step 1 : Character, Class, and Statistics</h3>
+<table>
+<tr>
+<td>Character Name <input name="name" placeholder="Sporty McSportsface"></td>
+<td>Race <select id="race" value="man" name="race" onchange="updaterace()">
+<option value="man">Human</option>
+<option value="helf">High Elf</option>
+<option value="welf">Wood Elf</option>
+<option value="delf">Dark Elf</option>
+<option value="alf">Half-Elf</option>
+<option value="horm">Half-Mountain Orc</option>
+<option value="hord">Half-Desert Orc</option>
+<option value="hodk">Half-Dark Orc</option>
+<option value="durf">Dwarf</option>
+<option value="gnom">Gnomes</option>
+<option value="othr">Other</option>
+</select></td>
+<td>
+Level <select name="level">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+</select>
+</td>
+</tr>
+<tr>
+<td colspan="3"><center>Class <select id="class" name="class" value="paladin" onchange="updateclass()">
+<option value="paladin">Paladin</option>
+<option value="mercenary">Mercenary</option>
+<option value="marksman">Marksman</option>
+<option value="assassin">Assassin</option>
+<option value="diplomat">Diplomat</option>
+<option value="thief">Thief</option>
+<option value="smith">Smith</option>
+<option value="mage">Mage</option>
+</select></center></td>
+</tr>
+<tr>
+<td colspan=3>
+<center>
+ | Physicality: <p style="display:inline-block" id="phs">0</p>
+ | Cognition: <p style="display:inline-block" id="cog">0</p>
+ | Coordination: <p style="display:inline-block" id="cor">0</p>
+ | Charisma: <p style="display:inline-block" id="chr">0</p>
+ | Health: <p style="display:inline-block" id="health">0</p> |
+ </center></td>
+
+</tr>
+</table>
+
+</form>
+</div></center>
+
+
+</body>
+</html>
