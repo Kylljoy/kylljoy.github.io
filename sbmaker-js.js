@@ -10,6 +10,8 @@ var class_health=0;
 var race_health=0;
 var statpoints=0;
 var phspoints=0;
+var phspoints=0;
+var phspoints=0;
 var cogpoints=0;
 var corpoints=0;
 var chrpoints=0;
@@ -31,6 +33,7 @@ var sks_map={"med":"Medicine","sur":"Survival","inv":"Invesitgate","rep":"Repair
 var cls_sks=["int","loc","pic","spe1","spe2","spe3","lk","ak","hid","sea","sca","rig","cra","alc"];
 var cls_act=[];
 var other_act=[];
+var rce_act=[];
 var sk_act=[];
 
 
@@ -163,7 +166,6 @@ function updatename(){
 }
 
 function updatelevel(){
-	
 		phspoints=0;
 		cogpoints=0;
 		corpoints=0;
@@ -177,8 +179,11 @@ function updatelevel(){
 
 function updateclass(){
 	cls_act=[];
+	clearlangs();
+	racelang();
 	switch(document.getElementById("class").value){
 		case "paladin":
+			alllang();
 			class_phs=4;
 			class_cog=3;
 			class_cor=2;
@@ -215,6 +220,7 @@ function updateclass(){
 			cls_act=["hid","loc","rig"];
 			break;
 		case "diplomat":
+			alllang();
 			class_phs=1;
 			class_cog=3;
 			class_cor=2;
@@ -242,6 +248,7 @@ function updateclass(){
 			cls_act=["cra","rig","sca"];
 			break;
 		case "mage":
+			alllang();
 			class_phs=1;
 			class_cog=4;
 			class_cor=2;
@@ -325,7 +332,7 @@ function getskp(){
 	var total=0;
 	var current_stat=Math.max(class_cog+race_cog,0);
 	for(i=0;i<document.getElementById("level").value;i++){
-		total+=skadd(current_stat);
+		total+=Math.max(skadd(current_stat),0)+1;
 		if(current_stat!==high_stat){
 				current_stat++;
 		}
@@ -334,6 +341,71 @@ function getskp(){
 	return multiplier*total;
 	
 }
+function alllang(){
+		addlang("eng","Anglish");
+		addlang("elf","Elven");
+		addlang("orc","Okran");
+		addlang("durf","Dwarf-Tongue");
+		addlang("nom","Nom");
+		addlang("run","Runic");
+}
+
+function allspoken(){
+		addlang("eng","Anglish");
+		addlang("elf","Elven");
+		addlang("orc","Okran");
+		addlang("durf","Dwarf-Tongue");
+		addlang("nom","Nom");
+}
+function addlang(langname,visual){
+		for(i=0;i<document.getElementById("lang1").length;i++){
+				if(document.getElementById("lang1")[i].value==langname){
+						return;
+				}
+		}
+		document.getElementById("lang1").add(new Option(visual,langname));
+		document.getElementById("lang2").add(new Option(visual, langname));
+		document.getElementById("lang3").add(new Option(visual, langname));
+}
+
+function clearlangs(){
+		lang1=document.getElementById("lang1");
+		lang1.innerHTML="";
+		lang2=document.getElementById("lang2");
+		lang2.innerHTML="";
+		lang3=document.getElementById("lang3");
+		lang3.innerHTML="";
+}
+
+function racelang(){
+	switch(document.getElementById("race").value){
+		case "man":
+			addlang("eng","Anglish");
+		break;
+		case "helf":
+		case "welf":
+		case "delf":
+			addlang("elf","Elvish");
+		break;
+		case "alf":
+			addlang("elf","Elvish");
+			addlang("eng","Anglish");
+			break;
+		case "hord":
+		case "hodk":
+		case "horm":
+			addlang("orc","Okran");
+			addlang("eng","Anglish");
+		break;
+		case "durf":
+			addlang("eng","Anglish");
+		break;
+		case "gnom":
+			allspoken();
+		break;
+	}
+}
+
 
 function updaterace(){
 	for(i=0;i<cls_sks.length;i++){
@@ -342,12 +414,18 @@ function updaterace(){
 	for(i=0;i<gen_sks.length;i++){
 		rc_sks[gen_sks[i]]=0;
 	}
+	updateclass();
+	
 
 	race_chr=0;
 	race_cog=0;
 	race_health=0;
 	race_cor=0;
 	race_phs=0;
+	rce_act=[];
+	rce_act.push("spe1");
+	racelang();
+	
 	switch(document.getElementById("race").value){
 		case "man":
 			race_chr=1;
@@ -368,28 +446,24 @@ function updaterace(){
 			rc_sks["stl"]+=5;
 		break;
 		case "alf":
-			rc_sks["spe1"]+=3;
-			rc_sks["spe2"]+=2;
+			rce_act.push("spe2");
 			break;
 		case "hord":
+			rce_act.push("spe2");
 			race_phs=2;
-			rc_sks["spe1"]+=3;
-			rc_sks["spe2"]+=1;
 			rc_sks["sur"]+=2;
 			race_cog=-1;
 		break;
 		case "hodk":
+			rce_act.push("spe2");
 			race_phs=2;
 			rc_sks["stl"]+=2;
-			rc_sks["spe1"]+=3;
-			rc_sks["spe2"]+=1;
 			race_cog=-1;
 		break;
 		case "horm":
+			rce_act.push("spe2");
 			race_phs=2;
 			rc_sks["hid"]+=2;
-			rc_sks["spe1"]+=3;
-			rc_sks["spe2"]+=1;
 			race_cog=-1;
 		break;
 		case "durf":
@@ -402,9 +476,8 @@ function updaterace(){
 			race_cor=-2;
 		break;
 		case "gnom":
+			rce_act.push("spe2");
 			race_phs=-3;
-			rc_sks["spe1"]+=3;
-			rc_sks["spe2"]+=2;
 			race_health=-2;
 			race_cor=1;
 			race_cog=1;
@@ -425,11 +498,18 @@ function updatenatskills(){
 	for(i=0;i<gen_sks.length;i++){
 		init_sks[gen_sks[i]]=0;
 	}
+	for(i=0;i<gen_sks.length;i++){
+		gen_inv[gen_sks[i]]=0;
+}
+
+	for(i=0;i<cls_sks.length;i++){
+		gen_inv[cls_sks[i]]=0;
+}
 	
 }
 
 function updatetags(){
-	sk_act=cls_act.concat(other_act);
+	sk_act=cls_act.concat(other_act.concat(rce_act));
 	tg_sks=tg_other.slice();
 	tg_sks.push(cls_tg);
 	rc_values=[];
@@ -486,7 +566,7 @@ function updatetags(){
 		var key = Object.keys(gen_inv)[i];
 		if(sk_act.count(key)>0 || gen_sks.count(key)>0){
 			items.push(sks_map[key]+" : <br>"+
-			"<button type='button' onclick='ivskdo(\""+key+"\")'>&darr;</button>   <p style='display:inline-block' id='inv_"+key+"'>"+gen_inv[key]*(1+tg_sks.count(gen_sks[i]))+"</p>    <button type='button' onclick='ivskup(\""+key+"\")'>&uarr;</button>"
+			"<button type='button' onclick='ivskdo(\""+key+"\")'>&larr;</button>   <p style='display:inline-block' id='inv_"+key+"'>"+gen_inv[key]*(1+tg_sks.count(gen_sks[i]))+"</p>    <button type='button' onclick='ivskup(\""+key+"\")'>&rarr;</button>"
 			);
 		}
 	}
@@ -505,8 +585,8 @@ Object.defineProperties(Array.prototype, {
 
 function allofthem(){
 	updatelevel();
-	updateclass();
 	updaterace();
+	updateclass();
 	updatetags();
 	updatenatskills();
 }
