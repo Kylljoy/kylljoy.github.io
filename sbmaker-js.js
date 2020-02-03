@@ -28,9 +28,10 @@ var sks_map={"med":"Medicine","sur":"Survival","inv":"Invesitgate","rep":"Repair
 "sca":"Scavenge","rig":"Rig","cra":"Crafting","alc":"Alchemy"
 };
 
-var cls_sks=["int","loc","pic","spe1","spe2","spe3","lk","ak","stl","sea","sca","rig","cra","alc"];
+var cls_sks=["int","loc","pic","spe1","spe2","spe3","lk","ak","hid","sea","sca","rig","cra","alc"];
 var cls_inv={};
 var cls_act=[];
+var sk_act=[];
 
 for(i=0;i<cls_sks.length;i++){
 		cls_inv[cls_sks[i]]=0;
@@ -38,7 +39,7 @@ for(i=0;i<cls_sks.length;i++){
 
 
 
-var gen_sks=["med","sur","inv","rep","for","str","sle","hid","spe","spc"];
+var gen_sks=["med","sur","inv","rep","for","str","sle","stl","spe","spc"];
 var init_sks={};
 
 for(i=0;i<gen_sks.length;i++){
@@ -69,7 +70,7 @@ function inskup(skillname){
 			skillval=sk_phs;
 			break;
 			case "sle":
-			case "hid":
+			case "stl":
 			skillval=sk_cor;
 			break;
 			case "spc":
@@ -90,7 +91,7 @@ function inskup(skillname){
 			sk_phs--;
 			break;
 			case "sle":
-			case "hid":
+			case "stl":
 			sk_cor--;
 			break;
 			case "spc":
@@ -117,7 +118,7 @@ function inskdo(skillname){
 			sk_phs++;
 			break;
 			case "sle":
-			case "hid":
+			case "stl":
 			sk_cor++;
 			break;
 			case "spc":
@@ -154,6 +155,7 @@ function updatelevel(){
 	
 }
 function updateclass(){
+	cls_act=[];
 	switch(document.getElementById("class").value){
 		case "paladin":
 			class_phs=4;
@@ -162,6 +164,7 @@ function updateclass(){
 			class_chr=2;
 			class_health=12;
 			cls_tg="for";
+			cls_act=[];
 			break;
 		case "mercenary":
 			class_phs=5;
@@ -185,7 +188,7 @@ function updateclass(){
 			class_cor=5;
 			class_chr=1;
 			class_health=6;
-			cls_tg="hid";
+			cls_tg="stl";
 			break;
 		case "diplomat":
 			class_phs=1;
@@ -227,7 +230,7 @@ function updateclass(){
 			class_health=6;
 			cls_tg="";
 	}
-			updatenatskills();
+		updatenatskills();
 		updatetags();
 	}
 
@@ -303,6 +306,8 @@ function updaterace(){
 		break;
 		case "gnom":
 			race_phs=-3;
+			rc_sks["spe1"]+=3;
+			rc_sks["spe2"]+=2;
 			race_health=-2;
 			race_cor=1;
 			race_cog=1;
@@ -310,15 +315,15 @@ function updaterace(){
 		break;
 		
 	}
-			updatenatskills();
+		updatenatskills();
 		updatetags();
 }
 
 function updatenatskills(){
-	sk_phs=document.getElementById("phs").innerHTML;
-	sk_cog=document.getElementById("cog").innerHTML;
-	sk_cor=document.getElementById("cor").innerHTML;
-	sk_chr=document.getElementById("chr").innerHTML;
+	sk_phs=Math.max(class_phs+race_phs,0);
+	sk_cog=Math.max(class_cog+race_cog,0);
+	sk_cor=Math.max(class_cor+race_cor,0);
+	sk_chr=Math.max(class_chr+race_chr,0);
 	for(i=0;i<gen_sks.length;i++){
 		init_sks[gen_sks[i]]=0;
 	}
@@ -356,6 +361,7 @@ function updatetags(){
 	document.getElementById("cor").innerHTML=Math.max(class_cor+race_cor,0);
 	document.getElementById("chr").innerHTML=Math.max(class_chr+race_chr,0);
 	document.getElementById("health").innerHTML=Math.max(class_health+race_health,0)+(2*(document.getElementById("level").value-1));
+	
 	document.getElementById("statpoints").innerHTML=statpoints;
 	document.getElementById("phspoints").innerHTML=phspoints;
 	document.getElementById("cogpoints").innerHTML=cogpoints;
@@ -369,15 +375,11 @@ function updatetags(){
 	for(i=0;i<gen_sks.length;i++){
 		document.getElementById("nat"+gen_sks[i]).innerHTML=init_sks[gen_sks[i]]*(1+tg_sks.count(gen_sks[i]));
 	}
-
+	
 	document.getElementById("sk_phs").innerHTML=sk_phs;
 	document.getElementById("sk_cor").innerHTML=sk_cor;
 	document.getElementById("sk_chr").innerHTML=sk_chr;
 	document.getElementById("sk_cog").innerHTML=sk_cog;
-
-
-
-
 }
 
 Object.defineProperties(Array.prototype, {
@@ -393,4 +395,5 @@ function allofthem(){
 	updateclass();
 	updaterace();
 	updatetags();
+	updatenatskills();
 }
