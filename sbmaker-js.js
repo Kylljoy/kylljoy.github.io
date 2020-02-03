@@ -8,7 +8,22 @@ var race_chr=0;
 var race_cor=0;
 var class_health=0;
 var race_health=0;
+var statpoints=0;
+var phspoints=0;
+var cogpoints=0;
+var corpoints=0;
+var chrpoints=0;
 
+function updatelevel(){
+		phspoints=0;
+		cogpoints=0;
+		corpoints=0;
+		chrpoinst=0;
+		statpoints=1*document.getElementById("level").value;
+		updatetags();
+		
+	
+}
 function updateclass(){
 	switch(document.getElementById("class").value){
 		case "paladin":
@@ -120,10 +135,27 @@ function updaterace(){
 }
 
 function updatetags(){
-	document.getElementById("phs").innerHTML=class_phs+race_phs;
-	document.getElementById("cog").innerHTML=class_cog+race_cog;
-	document.getElementById("cor").innerHTML=class_cor+race_cor;
-	document.getElementById("chr").innerHTML=class_chr+race_chr;
-	document.getElementById("health").innerHTML=class_health+race_health;
+	document.getElementById("phs").innerHTML=Math.max(class_phs+race_phs,0);
+	document.getElementById("cog").innerHTML=Math.max(class_cog+race_cog,0);
+	document.getElementById("cor").innerHTML=Math.max(class_cor+race_cor,0);
+	document.getElementById("chr").innerHTML=Math.max(class_chr+race_chr,0);
+	document.getElementById("health").innerHTML=Math.max(class_health+race_health,0)+(2*(document.getElementById("level").value-1));
+	document.getElementById("statpoints").innerHTML=statpoints;
+	document.getElementById("phspoints").innerHTML=phspoints;
+	document.getElementById("cogpoints").innerHTML=cogpoints;
+	document.getElementById("corpoints").innerHTML=corpoints;
+	document.getElementById("chrpoints").innerHTML=chrpoints;
+	document.getElementById("phsf").value=Math.max(class_phs+race_phs,0)+phspoints;
+	document.getElementById("cogf").value=Math.max(class_cog+race_cog,0)+cogpoints;
+	document.getElementById("corf").value=Math.max(class_cor+race_cor,0)+corpoints;
+	document.getElementById("chrf").value=Math.max(class_chr+race_chr,0)+chrpoints;
+	document.getElementById("healf").value=Math.max(class_health+race_health,0)+(2*(document.getElementById("level").value-1));
+}
 
+function allofthem(){
+		updatelevel();
+	updateclass();
+	updaterace();
+	updatetags();
+	
 }
