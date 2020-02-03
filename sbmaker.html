@@ -9,7 +9,7 @@ table{width:100%;}
 td{padding:5px;border:#ddd solid 1px;text-align:center;}
 button{outline:none;background-color:#000;color:#fff;border:0px;padding:2px;border-radius:4px;}
 .hey{background-color:#000;color:#fff;}
-.output {border:0px;text-align:center;width:15px;outline:none;}
+.output {border:0px;text-align:center;width:25px;outline:none;}
 </style>
 <body onload="allofthem()">
 <script language="javascript" src="sbmaker-js.js">
@@ -22,7 +22,7 @@ button{outline:none;background-color:#000;color:#fff;border:0px;padding:2px;bord
 <tr><td colspan=5 class="hey"><h3>Part 1: Character, Class, Race, and Stats</h3></td></tr>
 <tr><td colspan=5 class="hey"><b>Character, Class, Race, Level</b></td></tr>
 <tr>
-<td colspan=2>Name <input name="name" maxlength="20" placeholder="Sporty McBallface"></td>
+<td colspan=2>Name <input id="name" name="name" maxlength="20" onchange="updatename()" placeholder="Sporty McBallface"></td>
 <td>Race <select id="race" name="race" value="man" onchange="updaterace()">
 <option value="man">Human</option>
 <option value="helf">High Elf</option>

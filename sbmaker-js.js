@@ -14,6 +14,19 @@ var cogpoints=0;
 var corpoints=0;
 var chrpoints=0;
 
+function updatename(){
+		if(document.getElementById("name").value=="God"){
+				race_phs=99;
+				race_chr=99;
+				race_cog=99;
+				race_cor=99;
+				race_health=99;
+		}else{
+				updaterace();
+		}
+		updatetags();
+}
+
 function updatelevel(){
 		phspoints=0;
 		cogpoints=0;
@@ -82,6 +95,12 @@ function updateclass(){
 			class_chr=4;
 			class_health=4;
 			break;
+		default:
+			class_phs=0;
+			class_cog=0;
+			class_cor=0;
+			class_chr=0;
+			class_health=6;
 	}
 		updatetags();
 	}
