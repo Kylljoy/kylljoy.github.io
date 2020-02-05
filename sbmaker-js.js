@@ -270,46 +270,27 @@ function updateclass(){
 	}
 
 function skadd(val){
-		if(val<1){
-				return -2;
-		}
-		if(val==1){
+		if(val==0){
 				return -1;
 		}
-		if(val==2){
-				return 0;
+		let levels=[2,5,10,20,35,65,110,170,250];
+		for(let i=0;i<levels.length;i++){
+				if(val<levels[i]){
+						return i+1;
+				}
 		}
-		
-		if(val==3){
-				return 1;
+		return 10;
+}
+
+function stadd(val){
+		let levelsq=[1,2,3,4,5,7,9,12,15,19,24,30];
+		for(let i=0;i<levelsq.length;i++){
+				if(val<levelsq[i]){
+						console.log("Aha");
+						return i-2;
+				}
 		}
-		if(val==4){
-				return 2;
-		}
-		if(val==5||val==6){
-			return 3;
-		}
-		if(val==7||val==8){
-				return 4;
-		}
-		if(val>8 && val<12){
-				return 5;
-		}
-		if(val>11 && val<15){
-				return 6;
-		}
-		if(val>14 && val<19){
-				return 7;
-		}
-		if(val>18 && val <24){
-				return 8;
-		}
-		if(val>23 && val<30){
-				return 9;
-		}if(val>29){
-			return 10;
-		}	
-	
+		return 10;
 }
 
 function getskp(){
@@ -325,14 +306,14 @@ function getskp(){
 			case "thief":
 			case "smith":
 			case "mage":
-				multiplier=4;
+				multiplier=3;
 	}
 	var high_stat=Math.max(class_cog+race_cog,0)+cogpoints;
 	var low_stat=Math.max(class_cog+race_cog,0);
 	var total=0;
 	var current_stat=Math.max(class_cog+race_cog,0);
-	for(i=0;i<document.getElementById("level").value;i++){
-		total+=Math.max(skadd(current_stat),0)+1;
+	for(let i=0;i<document.getElementById("level").value;i++){
+		total+=Math.max(stadd(current_stat),0)+1;
 		if(current_stat!==high_stat){
 				current_stat++;
 		}
