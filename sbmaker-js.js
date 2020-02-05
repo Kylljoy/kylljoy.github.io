@@ -273,7 +273,7 @@ function skadd(val){
 		if(val==0){
 				return -1;
 		}
-		let levels=[2,5,10,20,35,65,110,170,250];
+		let levels=[2,5,20,40,70,110,160,230,300];
 		for(let i=0;i<levels.length;i++){
 				if(val<levels[i]){
 						return i+1;
