@@ -9,6 +9,11 @@ var race_cor=0;
 var class_health=0;
 var race_health=0;
 var statpoints=0;
+var phsf=0;
+var cogf=0;
+var corf=0;
+var chrf=0;
+var healf=0;
 var phspoints=0;
 var phspoints=0;
 var phspoints=0;
@@ -19,8 +24,19 @@ var sk_phs=0;
 var sk_cog=0;
 var sk_cor=0;
 var sk_chr=0;
+var phsi=0;
+var cogi=0;
+var cori=0;
+var chri=0;
+var heali=0;
+
+var aboxshown=false;
+
 var cls_tg="";
 var tg_other=[];
+
+var traits={};
+var ables={};
 
 
 var sks_map={"med":"Medicine","sur":"Survival","inv":"Invesitgate","rep":"Repair","for":"Fortitude","str":"Struggle",
@@ -171,7 +187,6 @@ function updatelevel(){
 		corpoints=0;
 		chrpoinst=0;
 		statpoints=1*document.getElementById("level").value;
-		updatenatskills();
 		updatetags();
 		
 	
@@ -179,11 +194,9 @@ function updatelevel(){
 
 function updateclass(){
 	cls_act=[];
-	clearlangs();
-	racelang();
+	langs();
 	switch(document.getElementById("class").value){
 		case "paladin":
-			alllang();
 			class_phs=4;
 			class_cog=3;
 			class_cor=2;
@@ -220,7 +233,6 @@ function updateclass(){
 			cls_act=["hid","loc","rig"];
 			break;
 		case "diplomat":
-			alllang();
 			class_phs=1;
 			class_cog=3;
 			class_cor=2;
@@ -248,7 +260,6 @@ function updateclass(){
 			cls_act=["cra","rig","sca"];
 			break;
 		case "mage":
-			alllang();
 			class_phs=1;
 			class_cog=4;
 			class_cor=2;
@@ -265,7 +276,6 @@ function updateclass(){
 			class_health=6;
 			cls_tg="";
 	}
-		updatenatskills();
 		updatetags();
 	}
 
@@ -300,18 +310,18 @@ function getskp(){
 			case "mercenary":
 			case "marksman":
 			case "assassin":
-				multiplier=2;
+				multiplier=4;
 			break;
 			case "diplomat":
 			case "thief":
 			case "smith":
 			case "mage":
-				multiplier=3;
+				multiplier=6;
 	}
-	var high_stat=Math.max(class_cog+race_cog,0)+cogpoints;
-	var low_stat=Math.max(class_cog+race_cog,0);
+	var high_stat=cogf;
+	var low_stat=cogi;
 	var total=0;
-	var current_stat=Math.max(class_cog+race_cog,0);
+	var current_stat=cogi;
 	for(let i=0;i<document.getElementById("level").value;i++){
 		total+=Math.max(stadd(current_stat),0)+1;
 		if(current_stat!==high_stat){
@@ -349,6 +359,10 @@ function addlang(langname,visual){
 		document.getElementById("lang3").add(new Option(visual, langname));
 }
 
+function addOption(value,name,sel){
+		sel.add(new Option(name,value));
+}
+
 function clearlangs(){
 		lang1=document.getElementById("lang1");
 		lang1.innerHTML="";
@@ -358,7 +372,8 @@ function clearlangs(){
 		lang3.innerHTML="";
 }
 
-function racelang(){
+function langs(){
+	clearlangs();
 	switch(document.getElementById("race").value){
 		case "man":
 			addlang("eng","Anglish");
@@ -385,7 +400,30 @@ function racelang(){
 			allspoken();
 		break;
 	}
+	switch(document.getElementById("class").value){
+			case "paladin":
+			case "diplomat":
+			case "mage":
+				alllang();
+			break;
+			default:
+			break;
+	}
 }
+
+function cbox(){
+	document.getElementById("grey").style.display="none";
+}
+
+
+function abox(){
+	if(!(document.getElementById("able").value=="none")){
+	document.getElementById("grey").style.display="block";
+	document.getElementById("informat").innerHTML="<h3>DESCRIPTION :</h3> <br><i style='margin-top:1em'>"+ables[document.getElementById("able").value]["desc"]+"</i>"+"<h3 style='margin-top:1em'>EFFECT :</h3> <br><i style='margin-top:1em'>"+ables[document.getElementById("able").value]["fx"]+"</i>";
+	}
+	
+}
+
 
 
 function updaterace(){
@@ -395,9 +433,6 @@ function updaterace(){
 	for(i=0;i<gen_sks.length;i++){
 		rc_sks[gen_sks[i]]=0;
 	}
-	updateclass();
-	
-
 	race_chr=0;
 	race_cog=0;
 	race_health=0;
@@ -405,8 +440,8 @@ function updaterace(){
 	race_phs=0;
 	rce_act=[];
 	rce_act.push("spe1");
-	racelang();
-	
+	langs();
+
 	switch(document.getElementById("race").value){
 		case "man":
 			race_chr=1;
@@ -466,16 +501,15 @@ function updaterace(){
 		break;
 		
 	}
-		updatenatskills();
 		updatetags();
 }
 
 function updatenatskills(){
 	inv_sks=getskp();
-	sk_phs=Math.max(class_phs+race_phs,0);
-	sk_cog=Math.max(class_cog+race_cog,0);
-	sk_cor=Math.max(class_cor+race_cor,0);
-	sk_chr=Math.max(class_chr+race_chr,0);
+	sk_phs=phsi;
+	sk_cog=cogi;
+	sk_cor=cori;
+	sk_chr=chri;
 	for(i=0;i<gen_sks.length;i++){
 		init_sks[gen_sks[i]]=0;
 	}
@@ -489,7 +523,32 @@ function updatenatskills(){
 	
 }
 
+function calc_stats_skills(){
+	phsi=Math.max(class_phs+race_phs,0);
+	cogi=Math.max(class_cog+race_cog,0);
+	cori=Math.max(class_cor+race_cor,0);
+	chri=Math.max(class_chr+race_chr,0);
+	heali=Math.max(class_health+race_health,0);
+	
+	
+	
+	phsf=phsi+phspoints;
+	cogf=cogi+cogpoints;
+	corf=cori+corpoints;
+	chrf=chri+chrpoints;
+	healf=heali+(2*(document.getElementById("level").value-1));
+	
+	
+}
+
+
 function updatetags(){
+	calc_stats_skills();
+	updatenatskills();
+	
+		
+	
+	
 	sk_act=cls_act.concat(other_act.concat(rce_act));
 	tg_sks=tg_other.slice();
 	tg_sks.push(cls_tg);
@@ -516,22 +575,22 @@ function updatetags(){
 	}
 	document.getElementById("invest_points").innerHTML=inv_sks;
 	
-	document.getElementById("phs").innerHTML=Math.max(class_phs+race_phs,0);
-	document.getElementById("cog").innerHTML=Math.max(class_cog+race_cog,0);
-	document.getElementById("cor").innerHTML=Math.max(class_cor+race_cor,0);
-	document.getElementById("chr").innerHTML=Math.max(class_chr+race_chr,0);
-	document.getElementById("health").innerHTML=Math.max(class_health+race_health,0)+(2*(document.getElementById("level").value-1));
+	document.getElementById("phs").innerHTML=phsi;
+	document.getElementById("cog").innerHTML=cogi;
+	document.getElementById("cor").innerHTML=cori;
+	document.getElementById("chr").innerHTML=chri;
+	document.getElementById("health").innerHTML=healf;
 	
 	document.getElementById("statpoints").innerHTML=statpoints;
 	document.getElementById("phspoints").innerHTML=phspoints;
 	document.getElementById("cogpoints").innerHTML=cogpoints;
 	document.getElementById("corpoints").innerHTML=corpoints;
 	document.getElementById("chrpoints").innerHTML=chrpoints;
-	document.getElementById("phsf").value=Math.max(class_phs+race_phs,0)+phspoints;
-	document.getElementById("cogf").value=Math.max(class_cog+race_cog,0)+cogpoints;
-	document.getElementById("corf").value=Math.max(class_cor+race_cor,0)+corpoints;
-	document.getElementById("chrf").value=Math.max(class_chr+race_chr,0)+chrpoints;
-	document.getElementById("healf").value=Math.max(class_health+race_health,0)+(2*(document.getElementById("level").value-1));
+	document.getElementById("phsf").value=phsf;
+	document.getElementById("cogf").value=cogf;
+	document.getElementById("corf").value=corf;
+	document.getElementById("chrf").value=chrf;
+	document.getElementById("healf").value=healf;
 	for(i=0;i<gen_sks.length;i++){
 		document.getElementById("nat"+gen_sks[i]).innerHTML=init_sks[gen_sks[i]]*(1+tg_sks.count(gen_sks[i]));
 	}
@@ -564,10 +623,34 @@ Object.defineProperties(Array.prototype, {
     }
 });
 
+function load_abilities(){
+	
+}
+
+
 function allofthem(){
 	updatelevel();
 	updaterace();
 	updateclass();
 	updatetags();
 	updatenatskills();
+	load_ables();
+}
+
+
+
+
+function load_ables(){
+ ables_name=["Move Fast and Break Things", "Moonshiner", "Dodge", "Rage", "Field Medic", "Quick Hands", "Skill Swap", "Pickup Artist", "Quickcast", "Read Emotions", "Fluent", "Good Listener", "Befuddle", "Credit Karma", "Turret", "Riot Shield", "Rip-off", "Con Man", "Celestial Forgiveness", "Painkiller", "To be Blunt", "Hit and Run", "Read the Manual", "Andrew’s Nightmare", "Bluff Buff", "Penny Puncher", "Appraiser", "Nervous Breakdown", "Fighting Spirit"];
+ ables_description=["You can pick locks quickly, but your work is sloppy", "You know alcohol like the back of your hand", "You know how to dive when you need it", "You can lose control and become a monster", "You can quickly perform medical operations while on the field. ", "You can swap weapons in battle extremely quicky", "Your knowledge in one skill may be applicable in more than one area", "You have great skills in seduction", "You can let loose a spell before entering battle", "You read people better than you can read books", "You are a master at speaking in tongues", "You may not be able to speak clearly, but you understand flawlessly", "You can confuse and annoy any enemy, like the asshole you are", "Your word is as good as gold", "If you stand your ground, you find you can shoot easier", "You can use your shield as a weapon", "You can swindle people out of their money", "You have a way with words around new faces", "You can slip up and your god will forgive you", "How are you still awake?", "You hit people with heavy things.", "Your horseback license is due to be revoked.", "You obviously don’t understand that some weapon’s aren’t ranged.", "HEALTH AS A RESOURCE", "You won the motivated reasoning olympics", "You throw money around like it’s a weapon. Because to you, it is.", "You played The Price is Right and won every game. The audience hated you.", "Fear and Stress seems to have a different effect on you", "Even from beyond the grave, you find a way to help"];
+ ables_effect=[ "Take advantage on lockpick checks with the threat of jamming the lock if the check is failed.", "Allows the crafting and distilling of alcohol of any kind, provided that any substance or liquid with sugar or starches is available.", "Allows one dodge per battle as a non-sacrificial preemptive turn. Negates all damage.", "Allows the character to go into a rage and deal 2x damage and take ½x  damage for 1d6 turns. Usage of rage per day is an equal amount of times as the relevant struggle skill modifier.", "Medical supplies can be taken out, applied, and put away in one turn.", "Allows the sacrificing of movement turns to draw a weapon without sacrificing an action turn.", "Allows certain general skills to be used in place of class skills. Passive boosts are ignored. Stealth in place of Hide. Speech in place of Intimidate. Repair in place of Craft. Spellcraft in place of Alchemy. Investigate in place of Search. Sleight in place of Pickpocket. Double disadvantage.", "Grants double additives on the first seduction check used on a character", "Cast one spell when entering battle, regardless of who goes first", "Examine others for signs of lying or distrust through a relevant investigate check", "Guaranteed success on Speak Language checks for one spoken language possessed either by your race or your class. Reading, Listening, and Speaking checks.", "Pass any Speak Language listening check, regardless of languages known, though no guarantee is provided for speaking and reading checks.", "Pass a Speech check to daze an enemy for 2 turns. Only works once per enemy.", "Allows purchasing of items on credit, with the price being paid at a later time. Only one item may be purchased on credit at a time", "Sacrifice a movement turn to shoot any ranged weapon. Does not sacrifice action turn.", "Shields can be used offensively, thrown or smacked. Deals 1d6 slammy damage, with relevant additives. 5 foot melee range, 10 foot ranged range.", "Passing a speech check causes selling prices of an item to double. Failing causes them to halve.", "Triple additives on bluff checks when talking to someone new.", "You are allowed to go against your deity’s will once per day.", "Rather than going unconscious at 0hp, you stay conscious and can act and move until you die. Including fortitude bonus health.", "All bladed weapons can be used as slammy weapons (using the hilt), dealing the same amount as slashy or stabby damage.", "Hit people with your horse or mount. Deals 10 slammy damage with relevant melee additives. Literally ride it into battle", "Throw any melee weapon to deal half ranged damage. Ranged bonuses apply. Range is double melee range.", "Sacrifice 5 health to cast any spell, regardless of how many daily spells are remaining.", "Pass a relevant buff check and pass any NPC-given skill or statistic check with an excuse or scapegoat", "Gold can be thrown as a ranged weapon, dealing one slammy damage for every 2 pieces thrown. Gold thrown is not recoverable. Maximum of 3 dmg/level. Ranged damage boosts apply", "Instantly know the value or worth of any item, and detect when you are being ripped off. Know the purpose of most items on sight, with no relevant local or arcane knowledge check.", "Take Frenzy status effect rather than the Terror of Fear effects.", "Post death, you can return as a spirit to act as a spy or to give advice. Any spoken checks (Speech, Local Knowledge, Search, etc.) can still be taken" ];
+ ables_function=[];
+ 
+ for(let q=0;q<ables_name.length;q++){
+	ables[ables_name[q]]={};
+	ables[ables_name[q]]["desc"]=ables_description[q];
+	ables[ables_name[q]]["fx"]=ables_effect[q];
+	addOption(ables_name[q],ables_name[q],document.getElementById("able"));
+ }
+	
 }
