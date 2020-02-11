@@ -16,7 +16,7 @@ button{outline:none;background-color:#000;color:#fff;border:0px;padding:2px;bord
 .greyout {display:none;left:0;top:0;width:100%;height:100vh;position:fixed;background-color:rgba(0,0,0,0.5);}
 .infobox{line-spacing:2em;align:center;position:absolute;z-index:99;background-color:#fff;color:#000;border:2px solid #000;padding:1em;height:50vh;margin:auto;top:0;bottom:0;left:0;right:0;width:50vw;}
 </style>
-<body onload="allofthem()">
+<body onload="load_ables();load_traits();update_board();">
 <script language="javascript" src="sbmaker-js.js">
 </script>
 <center><div style="padding:3px;background-color:#fff;margin:5px;border:1px solid #000;"><h1>The Official Sportsball! Character Generator (OKAK)</h1></div></center>
@@ -27,8 +27,8 @@ button{outline:none;background-color:#000;color:#fff;border:0px;padding:2px;bord
 <tr><td colspan=5 class="hey"><h3>Part 1: Character, Class, Race, and Stats</h3></td></tr>
 <tr><td colspan=5 class="hey"><b>Character, Class, Race, Level</b></td></tr>
 <tr>
-<td colspan=2>Name <input id="name" name="name" maxlength="20" onchange="updatename()" placeholder="Sporty McBallface"></td>
-<td>Race <select id="race" name="race" value="man" onchange="updaterace()">
+<td colspan=2>Name <input id="name" name="name" maxlength="20" onchange="update_board()" placeholder="Sporty McBallface"></td>
+<td>Race <select id="race" name="race" value="man" onchange="update_board()">
 <option value="man">Human</option>
 <option value="helf">High Elf</option>
 <option value="welf">Wood Elf</option>
@@ -42,7 +42,7 @@ button{outline:none;background-color:#000;color:#fff;border:0px;padding:2px;bord
 <option value="othr">Other</option>
 </select></td>
 <td>
-Level <select  name="level" id="level" value="1" onchange="updatelevel()">
+Level <select  name="level" id="level" value="1" onchange="update_board()">
 <option value="1">1</option>
 <option value="2">2</option>
 <option value="3">3</option>
@@ -55,7 +55,7 @@ Level <select  name="level" id="level" value="1" onchange="updatelevel()">
 <option value="10">10</option>
 </select>
 </td>
-<td><center>Class <select id="class" name="class" value="paladin" onchange="updateclass()">
+<td><center>Class <select id="class" name="class" value="paladin" onchange="update_board()">
 <option value="paladin">Paladin</option>
 <option value="mercenary">Mercenary</option>
 <option value="marksman">Marksman</option>
@@ -67,7 +67,7 @@ Level <select  name="level" id="level" value="1" onchange="updatelevel()">
 </select></center></td>
 </tr>
 <tr>
-<td colspan=2>Trait <select id="trait" name="trait" value="none"><option value="none">None</option></select>   <a onclick="tbox()">(?)</a></td>
+<td colspan=2>Trait <select id="trait" name="trait" value="none" onchange="update_board()"><option value="none">None</option></select>   <a onclick="tbox()">(?)</a></td>
 <td colspan=3>Ability <select id="able" name="able" value="none"><option value="none">None</option></select>   <a onclick="abox()">(?)</a><center><div class="greyout" id="grey"><div id="info_box" class="infobox"><div id="informat">DESCRIPTION:</div><div><button onclick="cbox()" style="margin-top:2em;" type="button">Close</button></div></div></div></center></td>
 </tr>
 <tr><td colspan=5 class="hey"><b>Base Statistics (Generated)</b></td></tr>
@@ -81,10 +81,10 @@ Level <select  name="level" id="level" value="1" onchange="updatelevel()">
 </tr>
 <tr><td colspan=5 class="hey"><b>Invest Stat Points</b></td></tr>
 <tr>
-<td>Physicality:<br><button type="button" onclick="if(phspoints>0){phspoints--;statpoints++;updatetags();}">&larr;</button>  <p style="display:inline-block" id="phspoints">0</p>  <button type="button" onclick="if(statpoints>0){phspoints++;statpoints--;updatetags();}">&rarr;</button></td>
-<td>Cognition: <br><button type="button" onclick="if(cogpoints>0){cogpoints--;statpoints++;updatetags();}">&larr;</button>  <p style="display:inline-block" id="cogpoints">0</p>  <button type="button" onclick="if(statpoints>0){cogpoints++;statpoints--;updatetags();}">&rarr;</button></td>
-<td>Coordination: <br><button type="button" onclick="if(corpoints>0){corpoints--;statpoints++;updatetags();}">&larr;</button>  <p style="display:inline-block" id="corpoints">0</p>  <button type="button" onclick="if(statpoints>0){corpoints++;statpoints--;updatetags();}">&rarr;</button></td>
-<td>Charisma: <br><button type="button" onclick="if(chrpoints>0){chrpoints--;statpoints++;updatetags();}">&larr;</button>  <p style="display:inline-block" id="chrpoints">0</p>  <button type="button" onclick="if(statpoints>0){chrpoints++;statpoints--;updatetags();}">&rarr;</button></td>
+<td>Physicality:<br><button type="button" onclick="if(phspoints>0){phspoints--;statpoints++;update_board();}">&larr;</button>  <p style="display:inline-block" id="phspoints">0</p>  <button type="button" onclick="if(statpoints>0){phspoints++;statpoints--;update_board();}">&rarr;</button></td>
+<td>Cognition: <br><button type="button" onclick="if(cogpoints>0){cogpoints--;statpoints++;update_board();}">&larr;</button>  <p style="display:inline-block" id="cogpoints">0</p>  <button type="button" onclick="if(statpoints>0){cogpoints++;statpoints--;update_board();}">&rarr;</button></td>
+<td>Coordination: <br><button type="button" onclick="if(corpoints>0){corpoints--;statpoints++;update_board();}">&larr;</button>  <p style="display:inline-block" id="corpoints">0</p>  <button type="button" onclick="if(statpoints>0){corpoints++;statpoints--;update_board();}">&rarr;</button></td>
+<td>Charisma: <br><button type="button" onclick="if(chrpoints>0){chrpoints--;statpoints++;update_board();}">&larr;</button>  <p style="display:inline-block" id="chrpoints">0</p>  <button type="button" onclick="if(statpoints>0){chrpoints++;statpoints--;update_board();}">&rarr;</button></td>
 <td>Remaining: <p style="display:inline-block" id="statpoints">0</p></td>
 
 </tr>
