@@ -30,6 +30,9 @@ var cori=0;
 var chri=0;
 var heali=0;
 
+var boostcount=0;
+var activeboosts=0;
+
 var lvltot=0;
 var clsname="";
 var rcname="";
@@ -269,6 +272,21 @@ function addlang(langname,visual){
 		document.getElementById("lang3").add(new Option(visual, langname));
 }
 
+function addboosts(number){
+	for(let q=1;q<4;q++){
+		boost=document.getElementById("boost"+q);
+		if(q>number){
+		boost.innerHTML="";
+		boost.add(new Option("None","none"));
+		}
+		if(q<number+1){
+		for(let g=0;g<Object.keys(sks_map).length;g++){
+		boost.add(new Option(sks_map[Object.keys(sks_map)[g]],Object.keys(sks_map)[g]));
+		}
+		}
+	}
+}
+
 function addOption(value,name,sel){
 		sel.add(new Option(name,value));
 }
@@ -357,16 +375,14 @@ function load_ables(){
 
 
 function load_traits(){
-	traits_name=[ "Outcast", "Outlaw", "Magician", "Warlock", "Medic", "Survivalist", "Trickster", "Lone Wolf", "Bard", "Non-Believer", "Shopaholic", "Pack Mule", "Religious", "Suave Idiot", "Four-Leaf Clover", "Know-It-All", "Cursed", "Chosen One", "Expendable Income", "Fast Learner", "Skilled", "Homicidal", "Hunter", "Slayer", "Know Thine Enemy", "Leader", "Liar, Liar", "Mittens God" ];
-	traits_description=[  "Due to past actions or events surrounding you, your kind no longer accepts you as one of their own.", "Due to your history as a criminal, you have been marked as wanted by local governments", "Though you were never formally trained in magic, you find yourself still adept for some forms of magic", "Rather than focus on your potential in a greater school, you honed your ability in the lesser schools", "You have prior training in the medical arts", "You are familiar with the wild", "Your lies have not yet caught up with you", "Unfortunate events in your past have led you to a solitary life", "You have a gift with words or music", "You do not have time to fret around with smoke and mirrors", "You have extensive experience with the art of the deal", "You have experience with lugging things across the country", "You have found your place with a god", "You always manage to bumble your way through things", "You have no skills, all luck.", "You seem to know everything there is to know", "You had an unfortunate run-in with a witch", "You have an unusual dynamic with a god/goddess", "You have more money than you know what to do with", "You find that you pick up new knowledge faster than expected", "You are able to master more skills than normal", "You find great pleasure in taking out others", "Your skill lies in hunting down your prey", "You are the premier expert on killing creatures", "You can accurately assess the weak points of any enemy", "Your group is greater than the sum of your parts. You're just the most important part.", "Pants on fire", "You find that fighting with your hands are best suited for combat" ];
-	traits_fx=["Permanently distrusted by those of the same race, +10 to Speak Language of your choice, any language of your choice.", "+10 to Lockpick, Pickpocket, and Stealth. Government officials will not trust you and you may be targeted by bounty hunters", "Learn non-arcane or arcane spells of one lesser school of magic, forfeit potential to learn from any other school. Gain an additional spell slot", "Cast any non-arcane spell as a charm without having it in your spellbook. Still required to learn arcane lesser spells to cast them. Forfeit your potential to learn greater school spells.", "Begin with +25 Medine", "Begin with +25 Survival", "Triple additives on Bluff checks. No additives when telling the truth or persuading.", "Gain two action turns per cycle when alone in combat.", "When performing the performing art of your choice, you may cast inflict emotion upon your audiences.", "+2 additive to all struggles checks against magic. You cannot learn magic spells or prayers.", "All buying prices at merchants are halved", "Gain 5 inventory slots", "Gain one prayer from any dominion or deity. Same rules concerning daily casting limits applies. You must keep in good graces with that deity.", "0 Cognition, Double charisma. Double additives on Seduction checks.", "All statistic additives and skill modifiers drop to zero. Gain a permanent +4 additive on every check.", "+10 to Local Knowledge, Arcane Knowledge, Medicine, and Survival. Nobody likes you", "You begin the game with a familiar of your choice. Every night, you merge into your familiar's body, and become it, intelligence and all. The party will not know unless you tell them.", "Call in the miracle of one deity once per day. Unlimited prayers. You will be smote by that deity if you so much as step out of line.", "Double Gold Gain", "Double experience gain", "Doubled skill points.", "Double damage against humanoids", "Double damage against animals", "Double damage against monsters", "Attacks ignore 25% defense on enemies", "All party members gain +25% attack. Only one member may have this trait.", "You can tell when someone is lying, but you don't know what they are lying about.", "Unarmed attacks deal 3x damage and have a 10% chance to stun enemies"];
-	traits_function=[ 	"ola", "loc+10,pic+10,stl+10", "ogs,oss", "cgs", "med+25", "sur+25", "", "", "", "", "", "", "opr", "cog=0,chr*2", "phs=0,cog=0,cor=0,chr=0,ask=0", "lk+25,ak+25,med+25,sur+25", "fam", "dom", "", "", "skp*2", "", "", "", "", "", "", "", "", "", "" 	];
+	traits_name=["Fast Learner","Outcast", "Outlaw", "Magician", "Warlock", "Medic", "Survivalist", "Trickster", "Lone Wolf", "Bard", "Non-Believer", "Shopaholic", "Pack Mule", "Religious", "Suave Idiot", "Four-Leaf Clover", "Know-It-All", "Cursed", "Chosen One", "Expendable Income", "Adept", "Skilled", "Homicidal", "Hunter", "Slayer", "Know Thine Enemy", "Leader", "Liar, Liar", "Mittens God" ];
+	traits_description=["You pick up skills and abilities rather quickly","Due to past actions or events surrounding you, your kind no longer accepts you as one of their own.", "Due to your history as a criminal, you have been marked as wanted by local governments", "Though you were never formally trained in magic, you find yourself still adept for some forms of magic", "Rather than focus on your potential in a greater school, you honed your ability in the lesser schools", "You have prior training in the medical arts", "You are familiar with the wild", "Your lies have not yet caught up with you", "Unfortunate events in your past have led you to a solitary life", "You have a gift with words or music", "You do not have time to fret around with smoke and mirrors", "You have extensive experience with the art of the deal", "You have experience with lugging things across the country", "You have found your place with a god", "You always manage to bumble your way through things", "You have no skills, all luck.", "You seem to know everything there is to know", "You had an unfortunate run-in with a witch", "You have an unusual dynamic with a god/goddess", "You have more money than you know what to do with", "You find that you gain field experience at a higher rate than normal", "You are able to master more skills than normal", "You find great pleasure in taking out others", "Your skill lies in hunting down your prey", "You are the premier expert on killing creatures", "You can accurately assess the weak points of any enemy", "Your group is greater than the sum of your parts. You're just the most important part.", "Pants on fire", "You find that fighting with your hands are best suited for combat" ];
+	traits_fx=["Boost one additional skill","Permanently distrusted by those of the same race, +10 to Speak Language of your choice, any language of your choice.", "+10 to Lockpick, Pickpocket, and Stealth. Government officials will not trust you and you may be targeted by bounty hunters", "Learn non-arcane or arcane spells of one lesser school of magic, forfeit potential to learn from any other school. Gain an additional spell slot", "Cast any non-arcane spell as a charm without having it in your spellbook. Still required to learn arcane lesser spells to cast them. Forfeit your potential to learn greater school spells.", "Begin with +25 Medine", "Begin with +25 Survival", "Triple additives on Bluff checks. No additives when telling the truth or persuading.", "Gain two action turns per cycle when alone in combat.", "When performing the performing art of your choice, you may cast inflict emotion upon your audiences.", "+2 additive to all struggles checks against magic. You cannot learn magic spells or prayers.", "All buying prices at merchants are halved", "Gain 5 inventory slots", "Gain one prayer from any dominion or deity. Same rules concerning daily casting limits applies. You must keep in good graces with that deity.", "0 Cognition, Double charisma. Double additives on Seduction checks.", "All statistic additives and skill modifiers drop to zero. Gain a permanent +4 additive on every check.", "+10 to Local Knowledge, Arcane Knowledge, Medicine, and Survival. Nobody likes you", "You begin the game with a familiar of your choice. Every night, you merge into your familiar's body, and become it, intelligence and all. The party will not know unless you tell them.", "Call in the miracle of one deity once per day. Unlimited prayers. You will be smote by that deity if you so much as step out of line.", "Double Gold Gain", "Double experience gain", "Doubled skill points.", "Double damage against humanoids", "Double damage against animals", "Double damage against monsters", "Attacks ignore 25% defense on enemies", "All party members gain +25% attack. Only one member may have this trait.", "You can tell when someone is lying, but you don't know what they are lying about.", "Unarmed attacks deal 3x damage and have a 10% chance to stun enemies"];
 	
 	for(let q=0;q<traits_name.length;q++){
 	traits[traits_name[q]]={};
 	traits[traits_name[q]]["desc"]=traits_description[q];
 	traits[traits_name[q]]["fx"]=traits_fx[q];
-	traits[traits_name[q]]["function"]=traits_function[q];
 	addOption(traits_name[q],traits_name[q],document.getElementById("trait"));
  }
 	
@@ -379,7 +395,7 @@ function gtn(){
 
 function update_board(){
 	// Get languages
-	
+
 	clearlangs();
 	switch(document.getElementById("race").value){
 		case "man":
@@ -493,6 +509,7 @@ function update_board(){
 	}
 
 	// Class Stats
+	boostcount=0;
 	switch(document.getElementById("class").value){
 		case "paladin":
 			class_phs=4;
@@ -502,6 +519,7 @@ function update_board(){
 			class_health=12;
 			cls_tg="for";
 			cls_act=["int","spe1","spe2","spe3","ak"];
+			boostcount+=1;
 			break;
 		case "mercenary":
 			class_phs=5;
@@ -511,6 +529,7 @@ function update_board(){
 			class_health=10;
 			cls_tg="str";
 			cls_act=["int","lk","sca"];
+			boostcount+=1;
 			break;
 		case "marksman":
 			class_phs=2;
@@ -520,6 +539,7 @@ function update_board(){
 			class_health=6;
 			cls_tg="inv";
 			cls_act=["sea","lk","sca"];
+			boostcount+=1;
 			break;
 		case "assassin":
 			class_phs=3;
@@ -529,6 +549,7 @@ function update_board(){
 			class_health=6;
 			cls_tg="stl";
 			cls_act=["hid","loc","rig"];
+			boostcount+=1;
 			break;
 		case "diplomat":
 			class_phs=1;
@@ -538,6 +559,7 @@ function update_board(){
 			class_health=4;
 			cls_tg="spc";
 			cls_act=["lk","spe1","spe2","spe3","ak"];
+			boostcount+=2;
 			break;
 		case "thief":
 			class_phs=2;
@@ -547,6 +569,7 @@ function update_board(){
 			class_health=6;
 			cls_tg="sle";
 			cls_act=["pic","loc","hid"];
+			boostcount+=2;
 			break;
 		case "smith":
 			class_phs=3;
@@ -556,6 +579,7 @@ function update_board(){
 			class_health=6;
 			cls_tg="rep";
 			cls_act=["cra","rig","sca"];
+			boostcount+=2;
 			break;
 		case "mage":
 			class_phs=1;
@@ -565,6 +589,7 @@ function update_board(){
 			class_health=4;
 			cls_tg="spe";
 			cls_act=["alc","spe1","spe2","spe3","ak"];
+			boostcount+=2;
 			break;
 		default:
 			class_phs=0;
@@ -573,6 +598,7 @@ function update_board(){
 			class_chr=0;
 			class_health=6;
 			cls_tg="";
+			boostcount+=1;
 	}
 	fixlevel=false;
 	if(lvltot!=document.getElementById("level").value){
@@ -583,6 +609,12 @@ function update_board(){
 		statpoints=1*document.getElementById("level").value;
 	}	
 
+	if(gtn()=="Fast Learner"){
+		boostcount++;
+	}
+
+
+	addboosts(boostcount);
 
 	
 	//Load Initial Stats
@@ -594,6 +626,10 @@ function update_board(){
 	heali=Math.max(class_health+race_health,0);
 	
 	//Load Initial Skill Investments
+	
+	
+	
+	
 	if(lvltot!=document.getElementById("level").value||clsname!=document.getElementById("class").value||rcname!=document.getElementById("race").value||allocchange){
 	// Load Stat points
 	
@@ -624,6 +660,31 @@ function update_board(){
 			inv_sks*=2;
 			
 		}
+		
+		if(gtn()=="Outcast"){
+			alllang();
+	}
+	
+	if(gtn()=="Outlaw"){
+			rc_sks["loc"]+=10;
+			rc_sks["pic"]+=10;
+			rc_sks["stl"]+=10;
+	}
+	
+	if(gtn()=="Medic"){
+		rc_sks["med"]+=25;
+	}
+	
+	if(gtn()=="Survivalist"){
+		rc_sks["sur"]+=25;
+	}
+	if(gtn()=="Know-It-All"){
+			rc_sks["med"]+=10;
+			rc_sks["sur"]+=10;
+			rc_sks["lk"]+=10;
+			rc_sks["ak"]+=10;
+	}
+	
 	
 
 	
@@ -635,14 +696,23 @@ function update_board(){
 	healf=heali+(2*(document.getElementById("level").value-1));
 	
 	//Sum Up All Skills
+	
+	tg_other=[];
+	tg_other.push(document.getElementById("boost1").value);
+	tg_other.push(document.getElementById("boost2").value);
+	tg_other.push(document.getElementById("boost3").value);
+	
+	
+	tg_sks=tg_other.slice();
+	tg_sks.push(cls_tg);
 	for(let g=0;g<Object.keys(gen_inv).length;g++){
-		fin_sks[Object.keys(gen_inv)[g]]=gen_inv[Object.keys(gen_inv)[g]];
+		fin_sks[Object.keys(gen_inv)[g]]=gen_inv[Object.keys(gen_inv)[g]]*(1+tg_sks.count(Object.keys(gen_inv)[g]));
 	}
 	for(let g=0;g<Object.keys(rc_sks).length;g++){
 		fin_sks[Object.keys(rc_sks)[g]]+=rc_sks[Object.keys(rc_sks)[g]];
 	}
 	for(let g=0;g<Object.keys(init_sks).length;g++){
-		fin_sks[Object.keys(init_sks)[g]]+=init_sks[Object.keys(init_sks)[g]];
+		fin_sks[Object.keys(init_sks)[g]]+=init_sks[Object.keys(init_sks)[g]]*(1+tg_sks.count(Object.keys(init_sks)[g]));
 	}
 	
 	
@@ -652,30 +722,7 @@ function update_board(){
 	
 	
 	//Final Trait Boosts/Effects
-	if(gtn()=="Outcast"){
-			alllang();
-	}
-	
-	if(gtn()=="Outlaw"){
-			fin_sks["loc"]+=10;
-			fin_sks["pic"]+=10;
-			fin_sks["stl"]+=10;
-	}
-	
-	if(gtn()=="Medic"){
-		fin_sks["med"]+=25;
-	}
-	
-	if(gtn()=="Survivalist"){
-		fin_sks["sur"]+=25;
-	}
-	if(gtn()=="Know-It-All"){
-			fin_sks["med"]+=10;
-			fin_sks["sur"]+=10;
-			fin_sks["lk"]+=10;
-			fin_sks["ak"]+=10;
-	}
-	
+
 	if(gtn()=="Suave Idiot"){
 			cogf=0;
 			chrf*=2;	
@@ -698,8 +745,6 @@ function update_board(){
 
 function redraw_board(){
 	sk_act=cls_act.concat(other_act.concat(rce_act));
-	tg_sks=tg_other.slice();
-	tg_sks.push(cls_tg);
 	rc_values=[];
 	for(i=0;i<gen_sks.length;i++){
 		if(rc_sks[gen_sks[i]]>0){
@@ -754,7 +799,7 @@ function redraw_board(){
 		var key = Object.keys(gen_inv)[i];
 		if(sk_act.count(key)>0 || gen_sks.count(key)>0){
 			items.push(sks_map[key]+" : <br>"+
-			"<button type='button' onclick='ivskdo(\""+key+"\")'>&larr;</button>   <p style='display:inline-block' id='inv_"+key+"'>"+gen_inv[key]*(1+tg_sks.count(gen_sks[i]))+"</p>    <button type='button' onclick='ivskup(\""+key+"\")'>&rarr;</button>"
+			"<button type='button' onclick='ivskdo(\""+key+"\")'>&larr;</button>   <p style='display:inline-block' id='inv_"+key+"'>"+gen_inv[key]*(1+tg_sks.count(key))+"</p>    <button type='button' onclick='ivskup(\""+key+"\")'>&rarr;</button>"
 			);
 		}
 	}
@@ -762,8 +807,18 @@ function redraw_board(){
 	
 	for(i=0;i<items.length;i+=3){
 		document.getElementById("availableskills").innerHTML+="<tr><td>"+items[i]+"</td><td>"+(items[i+1]==undefined?"":items[i+1])+"</td><td>"+(items[i+2]==undefined?"":items[i+2])+"</td></tr>";
+	}
 	
-	
+	var finskoutput=[];
+	document.getElementById("finalskills").innerHTML="";
+	for(i=0;i<Object.keys(fin_sks).length;i++){
+		var key = Object.keys(fin_sks)[i];
+			finskoutput.push(sks_map[key]+" : <br>"+
+			"<p style='display:inline-block' id='inv_"+key+"'>"+fin_sks[key]+"</p>"
+			);
+	}
+	for(i=0;i<finskoutput.length;i+=3){
+		document.getElementById("finalskills").innerHTML+="<tr><td>"+finskoutput[i]+"</td><td>"+(finskoutput[i+1]==undefined?"":finskoutput[i+1])+"</td><td>"+(finskoutput[i+2]==undefined?"":finskoutput[i+2])+"</td></tr>";
 	}
 	
 }

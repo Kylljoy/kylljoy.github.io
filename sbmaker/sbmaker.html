@@ -106,8 +106,11 @@ Level <select  name="level" id="level" value="1" onchange="update_board()">
 </table>
 <table style="margin-top:20px;">
 <tr><td colspan=3 class="hey"><h3>Part 2: Skills</h3></td></tr>
-<tr><td colspan=3 class="hey"><b>Racial Skills</b></td></tr>
+<tr><td colspan=3 class="hey"><b>Initial Skills</b></td></tr>
 <tbody id="rc_sks"></tbody>
+
+<tr><td colspan=3 class="hey"><b>Skill Boosts</b></td></tr>
+<tr><td>Boosted Skill: <select id="boost1" value="none"><option value="none">None</option></select></td><td>Boosted Skill: <select id="boost2" value="none"><option value="none">None</option></select></td><td>Boosted Skill: <select id="boost3" value="none"><option value="none">None</option></select></td></tr>
 
 
 <tr><td colspan=3 class="hey"><b>Initial Invested Skills</b></td></tr>
@@ -204,6 +207,10 @@ Level <select  name="level" id="level" value="1" onchange="update_board()">
 <option value="none">None</option>
 </select></td>
 </tr>
+<tr><td class="hey" colspan=3><b>Total Skills</b></tr>
+<tbody id="finalskills"></tbody>
+
+
 
 </table>
 
