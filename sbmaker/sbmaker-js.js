@@ -30,6 +30,15 @@ var cori=0;
 var chri=0;
 var heali=0;
 
+
+var weapondamage=0;
+var weaponrange=0;
+
+var chosenspells=0;
+
+
+
+
 var boostcount=0;
 var activeboosts=0;
 
@@ -38,7 +47,13 @@ var clsname="";
 var rcname="";
 var allocchange=false;
 
+var weapontype="";
+var weaponname=""; 
 
+
+var melee={};
+var ranged={};
+var casted={};
 
 var cls_tg="";
 var tg_other=[];
@@ -46,6 +61,9 @@ var tg_other=[];
 var traits={};
 var ables={};
 
+var lesser_schools=["Translocation","Conversion","Illusionry","Manipulation","Enchanting","Promotion","Divination"];
+
+var greater_schools=["Biomanipulation","Transcendence","Transmutation","Necromancy","Conjuration"];
 
 var sks_map={"med":"Medicine","sur":"Survival","inv":"Invesitgate","rep":"Repair","for":"Fortitude","str":"Struggle",
 "sle":"Sleight","hid":"Hide","spe":"Spellcraft","spc":"Speech",
@@ -88,6 +106,19 @@ for(i=0;i<gen_sks.length;i++){
 
 var rc_sks={};
 var tg_sks=[];
+
+function create_weapon(name,type,attack,range){
+	if(type=="m"){
+		melee[name]={"atk":attack,"rng":range};
+	}
+	if(type=="r"){
+		ranged[name]={"atk":attack,"rng":range};
+	}
+	if(type=="c"){
+		casted[name]={"atk":attack,"rng":range};
+	}
+	
+}
 
 function inskup(skillname){
 	var skillval = 0;
@@ -198,10 +229,10 @@ function skadd(val){
 		if(val==0){
 				return -1;
 		}
-		let levels=[2,5,20,40,70,110,160,230,300];
+		let levels=[1,9,25,66,161,381,901,2051,4601,10001];
 		for(let i=0;i<levels.length;i++){
-				if(val<levels[i]){
-						return i+1;
+				if(val<=levels[i]){
+						return i;
 				}
 		}
 		return 10;
@@ -279,7 +310,7 @@ function addboosts(number){
 		boost.innerHTML="";
 		boost.add(new Option("None","none"));
 		}
-		if(q<number+1){
+		if(q<number+1&&q>activeboosts){
 		for(let g=0;g<Object.keys(sks_map).length;g++){
 		boost.add(new Option(sks_map[Object.keys(sks_map)[g]],Object.keys(sks_map)[g]));
 		}
@@ -334,7 +365,7 @@ function updatenatskills(){
 	sk_chr=chri;
 	for(i=0;i<gen_sks.length;i++){
 		init_sks[gen_sks[i]]=0;
-	}
+	} 
 	for(i=0;i<gen_sks.length;i++){
 		gen_inv[gen_sks[i]]=0;
 }
@@ -354,7 +385,21 @@ Object.defineProperties(Array.prototype, {
     }
 });
 
+function load_weapons(){
+		weapon_names=["Sword", "Longsword", "Shortsword", "Broadsword", "Rapier", "Dagger", "Lance", "Warhammer", "Waraxe", "Throwing Knife", "Spear", "Bow", "Crossbow" ];
+		weapon_types=["m", "m", "m", "m", "m", "m", "m", "m", "m", "r", "r", "r", "r"];
+		weapon_damages=[ 4, 4, 5, 6, 3, 2, 6, 5, 6, 2, 4, 3, 4 ];
+		weapon_ranges=[5, 10, 4, 6, 5, 3, 2, 15, 7, 5, 10, 15, 35, 20];
+		
+		for(let q=0;q<weapon_names.length;q++){
+				create_weapon(weapon_names[q],weapon_types[q],weapon_damages[q],weapon_ranges[q]);
+			
+		}
+		
+		ranged["Throwing Knife"]["count"]=10;
+		ranged["Spear"]["count"]=5;
 
+}
 
 
 
@@ -377,7 +422,7 @@ function load_ables(){
 function load_traits(){
 	traits_name=["Fast Learner","Outcast", "Outlaw", "Magician", "Warlock", "Medic", "Survivalist", "Trickster", "Lone Wolf", "Bard", "Non-Believer", "Shopaholic", "Pack Mule", "Religious", "Suave Idiot", "Four-Leaf Clover", "Know-It-All", "Cursed", "Chosen One", "Expendable Income", "Adept", "Skilled", "Homicidal", "Hunter", "Slayer", "Know Thine Enemy", "Leader", "Liar, Liar", "Mittens God" ];
 	traits_description=["You pick up skills and abilities rather quickly","Due to past actions or events surrounding you, your kind no longer accepts you as one of their own.", "Due to your history as a criminal, you have been marked as wanted by local governments", "Though you were never formally trained in magic, you find yourself still adept for some forms of magic", "Rather than focus on your potential in a greater school, you honed your ability in the lesser schools", "You have prior training in the medical arts", "You are familiar with the wild", "Your lies have not yet caught up with you", "Unfortunate events in your past have led you to a solitary life", "You have a gift with words or music", "You do not have time to fret around with smoke and mirrors", "You have extensive experience with the art of the deal", "You have experience with lugging things across the country", "You have found your place with a god", "You always manage to bumble your way through things", "You have no skills, all luck.", "You seem to know everything there is to know", "You had an unfortunate run-in with a witch", "You have an unusual dynamic with a god/goddess", "You have more money than you know what to do with", "You find that you gain field experience at a higher rate than normal", "You are able to master more skills than normal", "You find great pleasure in taking out others", "Your skill lies in hunting down your prey", "You are the premier expert on killing creatures", "You can accurately assess the weak points of any enemy", "Your group is greater than the sum of your parts. You're just the most important part.", "Pants on fire", "You find that fighting with your hands are best suited for combat" ];
-	traits_fx=["Boost one additional skill","Permanently distrusted by those of the same race, +10 to Speak Language of your choice, any language of your choice.", "+10 to Lockpick, Pickpocket, and Stealth. Government officials will not trust you and you may be targeted by bounty hunters", "Learn non-arcane or arcane spells of one lesser school of magic, forfeit potential to learn from any other school. Gain an additional spell slot", "Cast any non-arcane spell as a charm without having it in your spellbook. Still required to learn arcane lesser spells to cast them. Forfeit your potential to learn greater school spells.", "Begin with +25 Medine", "Begin with +25 Survival", "Triple additives on Bluff checks. No additives when telling the truth or persuading.", "Gain two action turns per cycle when alone in combat.", "When performing the performing art of your choice, you may cast inflict emotion upon your audiences.", "+2 additive to all struggles checks against magic. You cannot learn magic spells or prayers.", "All buying prices at merchants are halved", "Gain 5 inventory slots", "Gain one prayer from any dominion or deity. Same rules concerning daily casting limits applies. You must keep in good graces with that deity.", "0 Cognition, Double charisma. Double additives on Seduction checks.", "All statistic additives and skill modifiers drop to zero. Gain a permanent +4 additive on every check.", "+10 to Local Knowledge, Arcane Knowledge, Medicine, and Survival. Nobody likes you", "You begin the game with a familiar of your choice. Every night, you merge into your familiar's body, and become it, intelligence and all. The party will not know unless you tell them.", "Call in the miracle of one deity once per day. Unlimited prayers. You will be smote by that deity if you so much as step out of line.", "Double Gold Gain", "Double experience gain", "Doubled skill points.", "Double damage against humanoids", "Double damage against animals", "Double damage against monsters", "Attacks ignore 25% defense on enemies", "All party members gain +25% attack. Only one member may have this trait.", "You can tell when someone is lying, but you don't know what they are lying about.", "Unarmed attacks deal 3x damage and have a 10% chance to stun enemies"];
+	traits_fx=["Boost one additional skill","Permanently distrusted by those of the same race, +10 to Speak Language of your choice, any language of your choice.", "+10 to Lockpick, Pickpocket, and Stealth. Government officials will not trust you and you may be targeted by bounty hunters", "Learn non-arcane or arcane spells of one lesser school of magic, forfeit potential to learn from any other school. Gain an additional spell slot", "Cast any non-arcane spell as a charm without having it in your spellbook. Still required to learn arcane lesser spells to cast them. Forfeit your potential to learn greater school spells.", "Begin with +25 Medine", "Begin with +25 Survival", "Triple additives on Bluff checks. No additives when telling the truth or persuading.", "Gain two action turns per cycle when alone in combat.", "When performing the performing art of your choice, you may cast inflict emotion upon your audiences.", "+2 additive to all struggles checks against magic. You cannot learn magic spells or prayers.", "All buying prices at merchants are halved", "Gain 5 inventory slots", "Gain one prayer from any dominion or deity. Same rules concerning daily casting limits applies. You must keep in good graces with that deity.", "0 Cognition, Double charisma. Double additives on Seduction checks.", "All statistic additives and skill modifiers drop to zero. Gain a permanent +2 additive on every check.", "+10 to Local Knowledge, Arcane Knowledge, Medicine, and Survival. Nobody likes you", "You begin the game with a familiar of your choice. Every night, you merge into your familiar's body, and become it, intelligence and all. The party will not know unless you tell them.", "Call in the miracle of one deity once per day. Unlimited prayers. You will be smote by that deity if you so much as step out of line.", "Double Gold Gain", "Double experience gain", "Doubled skill points.", "Double damage against humanoids", "Double damage against animals", "Double damage against monsters", "Attacks ignore 25% defense on enemies", "All party members gain +25% attack. Only one member may have this trait.", "You can tell when someone is lying, but you don't know what they are lying about.", "Unarmed attacks deal 3x damage and have a 10% chance to stun enemies"];
 	
 	for(let q=0;q<traits_name.length;q++){
 	traits[traits_name[q]]={};
@@ -615,7 +660,7 @@ function update_board(){
 
 
 	addboosts(boostcount);
-
+	activeboosts=boostcount;
 	
 	//Load Initial Stats
 	
@@ -739,6 +784,50 @@ function update_board(){
 	}
 	
 	
+	//Inventory Stuff
+	
+	if(weapontype!=document.getElementById("weapontype").value){
+			weapontype=document.getElementById("weapontype").value;
+			weaponlist=document.getElementById("weapon");
+			weaponlist.innerHTML="";
+			
+			if(weapontype=="m"){
+				for(let m=0;m<Object.keys(melee).length;m++){
+					addOption(Object.keys(melee)[m],Object.keys(melee)[m],weaponlist);
+				}
+			}
+			if(weapontype=="r"){
+					for(let m=0;m<Object.keys(ranged).length;m++){
+					addOption(Object.keys(ranged)[m],Object.keys(ranged)[m],weaponlist);
+				}
+			}
+			if(weapontype=="c"){
+			
+			}
+	}
+	
+	//Calculate Damages
+	weaponname=document.getElementById("weapon").value;
+	weapondamage=0;
+	weaponrange=0;
+	if(weapontype=="m"){
+		weapondamage+=melee[weaponname]["atk"];
+		weaponrange+=melee[weaponname]["rng"];
+		if(weaponname=="Dagger"){
+				weapondamage+=stadd(corf);
+		}else{
+			weapondamage+=stadd(phsf);
+		}
+		
+	}
+	
+	if(weapontype=="r"){
+		weapondamage+=ranged[weaponname]["atk"];
+		weaponrange+=ranged[weaponname]["rng"];
+		weapondamage+=stadd(cogf);
+	}
+	
+	
 
 	redraw_board();
 }
@@ -821,4 +910,9 @@ function redraw_board(){
 		document.getElementById("finalskills").innerHTML+="<tr><td>"+finskoutput[i]+"</td><td>"+(finskoutput[i+1]==undefined?"":finskoutput[i+1])+"</td><td>"+(finskoutput[i+2]==undefined?"":finskoutput[i+2])+"</td></tr>";
 	}
 	
+	document.getElementById("weaponstats").innerHTML="Damage: "+weapondamage+"<br>Range: "+weaponrange;
+	
+	
+	
 }
+
