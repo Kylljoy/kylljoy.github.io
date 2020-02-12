@@ -15,9 +15,12 @@ button{outline:none;background-color:#000;color:#fff;border:0px;padding:2px;bord
 .output {border:0px;text-align:center;width:25px;outline:none;}
 .greyout {display:none;left:0;top:0;width:100%;height:100vh;position:fixed;background-color:rgba(0,0,0,0.5);}
 .infobox{line-spacing:2em;align:center;position:absolute;z-index:99;background-color:#fff;color:#000;border:2px solid #000;padding:1em;height:50vh;margin:auto;top:0;bottom:0;left:0;right:0;width:50vw;}
+#lessermagicyes,#greatermagicyes{display:none;}
 </style>
-<body onload="load_ables();load_traits();load_weapons();update_board();">
+<body onload="load_ables();load_greater_spells();load_traits();load_weapons();update_board();">
 <script language="javascript" src="greaterspellindex.js"></script>
+<script language="javascript" src="lesserspellindex.js"></script>
+<script language="javascript" src="arcanespellindex.js"></script>
 <script language="javascript" src="sbmaker-js.js"></script>
 </script>
 <center><div style="padding:3px;background-color:#fff;margin:5px;border:1px solid #000;"><h1>The Official Sportsball! Character Generator (OKAK)</h1></div></center>
@@ -215,20 +218,28 @@ Level <select  name="level" id="level" value="1" onchange="update_board()">
 <br><br><br>
 
 <table>
-<tr><td colspan=3 class="hey"><h3>Part 3 : Inventory</h3></td></tr>
+<tr><td colspan=4 class="hey"><h3>Part 3 : Inventory</h3></td></tr>
 <tr><td>Weapon Type:    <select id="weapontype" onchange="update_board()">
 <option value="m">Melee</option>
 <option value="r">Ranged</option>
 <option value="c">Magic</option>
 
 
-</select></td><td colspan>Weapon: <select id="weapon" onchange="update_board()"></select></td>
+</select></td><td colspan=2>Weapon: <select id="weapon" onchange="update_board()"></select></td>
 <td id="weaponstats">
 </td>
 </tr>
-<tr><td class="hey" colspan=3>Magic</td></tr>
-<tr><td>School : <select id="magicschool" value="none"><option value="none">None</option></select></td><td>Spell : <select id="magicspell" value="none"><option value="none">None</option></select></td><td><button type="button">Add Spell</button></td></tr>
+<tr><td class="hey" colspan=4>Greater Magic</td></tr>
 
+<tr id="greatermagicno"><td colspan=4><i>(This Magic Feild is Not Available to Your Class)</i></td></tr>
+
+<tr id="greatermagicyes"><td>School : <select id="gmagicschool" value="none" onchange="update_board()"><option value="none">None</option></select></td>
+<td>Level : <select id="gmagiclevel" value="1" onchange="update_board()"></select></td>
+<td>Spell : <select id="gmagicspell" value="none" onchange="update_board()"><option value="none">None</option></select></td><td><button type="button">Add Spell</button></td></tr>
+<tr><td class="hey" colspan=4>Lesser Magic</td></tr>
+<tr><td id="lessermagicno" colspan=4><i>(This Magic Feild is Not Available to Your Class)</i></td></tr>
+<tr id="lessermagicyes"><td>School : <select id="lmagicschool" value="none" onchange="update_board()"><option value="none">None</option></select></td><
+<td>Spell : <select id="lmagicspell" onchange="update_board()" value="none"><option value="none">None</option></select></td><td><button type="button">Add Spell</button></td></tr>
 </table>
 </form>
 </div></center>

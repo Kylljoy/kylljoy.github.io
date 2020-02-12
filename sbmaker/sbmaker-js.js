@@ -36,6 +36,8 @@ var weaponrange=0;
 
 var chosenspells=0;
 
+var gspellschool="";
+var gspelllevel=0;
 
 
 
@@ -344,6 +346,9 @@ function tbox(){
 	
 }
 
+
+
+
 function abox(){
 	if(!(document.getElementById("able").value=="none")){
 	document.getElementById("grey").style.display="block";
@@ -401,7 +406,17 @@ function load_weapons(){
 
 }
 
-
+function load_greater_spells(){
+	greaterschoollist=document.getElementById("gmagicschool");
+	for(let q=0;q<Object.keys(greaterspelldb).length;q++){
+			greaterschoollist.add(new Option(Object.keys(greaterspelldb)[q],Object.keys(greaterspelldb)[q]))
+	}
+		for(let q=0;q<8;q++){
+			document.getElementById("gmagiclevel").add(new Option(q,q));
+	}
+	
+	
+}
 
 function load_ables(){
  ables_name=["Move Fast and Break Things", "Moonshiner", "Dodge", "Rage", "Field Medic", "Quick Hands", "Skill Swap", "Pickup Artist", "Quickcast", "Read Emotions", "Fluent", "Good Listener", "Befuddle", "Credit Karma", "Turret", "Riot Shield", "Rip-off", "Con Man", "Celestial Forgiveness", "Painkiller", "To be Blunt", "Hit and Run", "Read the Manual", "Andrew's Nightmare", "Bluff Buff", "Penny Puncher", "Appraiser", "Nervous Breakdown", "Fighting Spirit"];
@@ -913,6 +928,25 @@ function redraw_board(){
 	document.getElementById("weaponstats").innerHTML="Damage: "+weapondamage+"<br>Range: "+weaponrange;
 	
 	
+	if(document.getElementById("class").value=="mage"){
+		document.getElementById("greatermagicno").style.display="none";
+		document.getElementById("greatermagicyes").style.display="table-row";
+	}else{
+		document.getElementById("greatermagicyes").style.display="none";
+		document.getElementById("greatermagicno").style.display="table-row";
+	}
 	
+	if(document.getElementById("gmagicschool").value!=gspellschool || document.getElementById("gmagiclevel").value!=gspelllevel){
+		gspelllist=document.getElementById("gmagicspell");
+		gspelllist.innerHTML="";
+		gspellschool=document.getElementById("gmagicschool").value;
+		gspelllevel=document.getElementById("gmagiclevel").value;
+		if(gspellschool!="none"){
+		gspellswath=greaterspelldb[gspellschool][gspelllevel];
+		for(let q=0;q<Object.keys(gspellswath).length;q++){
+			 gspelllist.add(new Option(Object.keys(gspellswath)[q],Object.keys(gspellswath)[q]));
+		}
+		}
+	}
 }
 
