@@ -346,6 +346,13 @@ function tbox(){
 	
 }
 
+function gsbox(){
+	if(!(document.getElementById("gmagicspell").value=="")){
+	document.getElementById("grey").style.display="block";
+	document.getElementById("informat").innerHTML="<h3>SPELL:</h3> <br><i style='margin-top:1em'>"+document.getElementById("gmagicspell").value+"</i>"+"<h3 style='margin-top:1em'>EFFECT :</h3> <br><i style='margin-top:1em'>"+greaterspelldb[document.getElementById("gmagicschool").value][document.getElementById("gmagiclevel").value][document.getElementById("gmagicspell").value]+"</i>";
+	}
+	
+}
 
 
 
@@ -411,7 +418,7 @@ function load_greater_spells(){
 	for(let q=0;q<Object.keys(greaterspelldb).length;q++){
 			greaterschoollist.add(new Option(Object.keys(greaterspelldb)[q],Object.keys(greaterspelldb)[q]))
 	}
-		for(let q=0;q<8;q++){
+		for(let q=1;q<8;q++){
 			document.getElementById("gmagiclevel").add(new Option(q,q));
 	}
 	
