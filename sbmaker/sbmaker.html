@@ -15,9 +15,11 @@ button{outline:none;background-color:#000;color:#fff;border:0px;padding:2px;bord
 .output {border:0px;text-align:center;width:25px;outline:none;}
 .greyout {display:none;left:0;top:0;width:100%;height:100vh;position:fixed;background-color:rgba(0,0,0,0.5);}
 .infobox{line-spacing:2em;align:center;position:absolute;z-index:99;background-color:#fff;color:#000;border:2px solid #000;padding:1em;height:50vh;margin:auto;top:0;bottom:0;left:0;right:0;width:50vw;}
-#lessermagicyes,#greatermagicyes{display:none;}
+#lessermagicyes, #sacraficeyes, #greatermagicyes, #paladinyes {display:none;}
+.item_container{border:1px solid black;border-radius:5px;width:50%;padding:5px;}
+
 </style>
-<body onload="load_ables();load_greater_spells();load_traits();load_weapons();update_board();">
+<body onload="load_src();update_board();">
 <script language="javascript" src="greaterspellindex.js"></script>
 <script language="javascript" src="lesserspellindex.js"></script>
 <script language="javascript" src="arcanespellindex.js"></script>
@@ -235,11 +237,21 @@ Level <select  name="level" id="level" value="1" onchange="update_board()">
 
 <tr id="greatermagicyes"><td>School : <select id="gmagicschool" value="none" onchange="update_board()"><option value="none">None</option></select></td>
 <td>Level : <select id="gmagiclevel" value="1" onchange="update_board()"></select></td>
-<td>Spell : <select id="gmagicspell" value="none" onchange="update_board()"><option value="none">None</option></select>   <a onclick="gsbox()">(?)</a></td><td><button type="button">Add Spell</button></td></tr>
+<td>Spell : <select id="gmagicspell" value="none" onchange="update_board()"><option value="none">None</option></select>   <a onclick="gsbox()">(?)</a></td><td><button type="button" onclick="addgspell()">Add Spell</button></td></tr>
+<tr id="sacrificeyes"><td colspan=2>Spell Slots :  <p id="sacspellslot" style="display:inline-block;">0</p><button type="button" style="margin-left:20px;" onclick="if(spellslotelect>0){spellslotelect--;gspellselect+=2;update_board();}">&rarr;</button></td>
+
+
+<td colspan=2><button type="button" style="margin-right:20px;" onclick="if(gspellselect>1&&spellslotelect<(lvltot-1)){gspellselect-=2;spellslotelect++;update_board();}">&larr;</button>School Spells :  <p id="sacspells" style="display:inline-block;">0</p></td></tr>
+
 <tr><td class="hey" colspan=4>Lesser Magic</td></tr>
-<tr><td id="lessermagicno" colspan=4><i>(This Magic Feild is Not Available to Your Class)</i></td></tr>
-<tr id="lessermagicyes"><td>School : <select id="lmagicschool" value="none" onchange="update_board()"><option value="none">None</option></select></td><
+<tr><td id="lessermagicno" colspan=4><i>(This Magic Field is Not Available to Your Class)</i></td></tr>
+<tr id="lessermagicyes"><td>School : <select id="lmagicschool" value="none" onchange="update_board()"><option value="none">None</option></select></td>
 <td>Spell : <select id="lmagicspell" onchange="update_board()" value="none"><option value="none">None</option></select></td><td><button type="button">Add Spell</button></td></tr>
+<tr><td class="hey" colspan=4>Religous Dominion</td></tr>
+<tr id="paladinno"><td colspan=4> <i>(This Magic Field is Not Available to Your Class)</i></td></tr>
+<tr id="paladinyes"><td  colspan=2 >Dominion <select id="paladindominion"></select></td><td  colspan=2 >Variant <select id="paladinvariant" value="good"><option value="good">Good</option><option value="evil">Evil</option></select></td></tr>
+<tr><td colspan=4 class="hey">Spell List (Remaining Spell Slots : 0)</td></tr>
+<tr><td colspan=4><center id="spell_list"></center></td></tr>
 </table>
 </form>
 </div></center>

@@ -35,10 +35,13 @@ var weapondamage=0;
 var weaponrange=0;
 
 var chosenspells=0;
+var spell_list=[];
 
 var gspellschool="";
 var gspelllevel=0;
 
+var spellslotelect=0;
+var gspellselect=0;
 
 
 var boostcount=0;
@@ -62,6 +65,8 @@ var tg_other=[];
 
 var traits={};
 var ables={};
+
+var totalspellslots=2;
 
 var lesser_schools=["Translocation","Conversion","Illusionry","Manipulation","Enchanting","Promotion","Divination"];
 
@@ -305,6 +310,33 @@ function addlang(langname,visual){
 		document.getElementById("lang3").add(new Option(visual, langname));
 }
 
+function getspelllevels(charlevel,spellamount,slotstaken){
+	let spelltotal = spellamount;
+	let slots=slotstaken;
+	let spelllevels={};
+	let reverseindex=0;
+	for(q=2;q<charlevel+1;q++){
+			if(slots>=1&&spelltotal>=1){
+					spelllevels[q]=1;
+					slots--;
+					spelltotal--;
+			}else if(slots==0&&spelltotal>=3){
+					spelllevels[((charlevel)-reverseindex)]=3;
+					reverseindex++;
+					spelltotal-=3;
+			}else if(spelltotal<3&&spelltotal>0){
+					spelllevels[(charlevel)-reverseindex]=spelltotal;
+					reverseindex++;
+					spelltotal=0;
+			}else{
+					break;
+			}
+	}
+	return spelllevels;
+	
+}
+
+
 function addboosts(number){
 	for(let q=1;q<4;q++){
 		boost=document.getElementById("boost"+q);
@@ -364,7 +396,12 @@ function abox(){
 	
 }
 
-
+function addgspell(){
+		if(document.getElementById("gmagicspell").value!=""){
+			spell_list.push([document.getElementById("gmagicschool").value,document.getElementById("gmagiclevel").value,document.getElementById("gmagicspell").value]);	
+			update_board();
+		}
+}
 
 
 
@@ -396,6 +433,18 @@ Object.defineProperties(Array.prototype, {
         }
     }
 });
+
+
+function load_doms(){
+	dominions=["Life","Death","Protection","War","Knowledge","Trickery","Travel","Fire","Ice","Water","Sky","Air","Earth","Animal","Plant"];
+	
+	for(let q=0;q<dominions.length;q++){
+			document.getElementById("paladindominion").add(new Option(dominions[q],dominions[q]));
+		
+	}
+	
+	
+}
 
 function load_weapons(){
 		weapon_names=["Sword", "Longsword", "Shortsword", "Broadsword", "Rapier", "Dagger", "Lance", "Warhammer", "Waraxe", "Throwing Knife", "Spear", "Bow", "Crossbow" ];
@@ -577,6 +626,7 @@ function update_board(){
 
 	// Class Stats
 	boostcount=0;
+	totalspellslots=2;
 	switch(document.getElementById("class").value){
 		case "paladin":
 			class_phs=4;
@@ -587,6 +637,7 @@ function update_board(){
 			cls_tg="for";
 			cls_act=["int","spe1","spe2","spe3","ak"];
 			boostcount+=1;
+			totalspellslots+=1;
 			break;
 		case "mercenary":
 			class_phs=5;
@@ -657,6 +708,7 @@ function update_board(){
 			cls_tg="spe";
 			cls_act=["alc","spe1","spe2","spe3","ak"];
 			boostcount+=2;
+			totalspellslots+=2;
 			break;
 		default:
 			class_phs=0;
@@ -698,6 +750,7 @@ function update_board(){
 	
 	
 	if(lvltot!=document.getElementById("level").value||clsname!=document.getElementById("class").value||rcname!=document.getElementById("race").value||allocchange){
+
 	// Load Stat points
 	
 	inv_sks=getskp();
@@ -717,6 +770,11 @@ function update_board(){
 	}
 	for(i=0;i<cls_sks.length;i++){
 		gen_inv[cls_sks[i]]=0;
+	}
+	if(clsname=="mage"){
+			spellslotelect=0;
+			gspellselect=(lvltot-1)*3;
+		
 	}
 }
 	
@@ -849,7 +907,13 @@ function update_board(){
 		weapondamage+=stadd(cogf);
 	}
 	
+	//Magic!
 	
+	if(clsname!="mage"){
+	 spellslotelect=0;
+	 gspellselect=0;	
+		
+	}
 
 	redraw_board();
 }
@@ -938,9 +1002,19 @@ function redraw_board(){
 	if(document.getElementById("class").value=="mage"){
 		document.getElementById("greatermagicno").style.display="none";
 		document.getElementById("greatermagicyes").style.display="table-row";
+		document.getElementById("sacrificeyes").style.display="table-row";
 	}else{
 		document.getElementById("greatermagicyes").style.display="none";
 		document.getElementById("greatermagicno").style.display="table-row";
+		document.getElementById("sacrificeyes").style.display="none";
+	}
+	
+	if(document.getElementById("class").value=="paladin"){
+		document.getElementById("paladinno").style.display="none";
+		document.getElementById("paladinyes").style.display="table-row";
+	}else{
+		document.getElementById("paladinyes").style.display="none";
+		document.getElementById("paladinno").style.display="table-row";
 	}
 	
 	if(document.getElementById("gmagicschool").value!=gspellschool || document.getElementById("gmagiclevel").value!=gspelllevel){
@@ -955,5 +1029,19 @@ function redraw_board(){
 		}
 		}
 	}
+	
+	document.getElementById("spell_list").innerHTML="";
+	if(spell_list.length>0){
+	document.getElementById("spell_list").innerHTML="(Click to remove a spell)<br>"	
+	}
+	for(let q=0;q<spell_list.length;q++){
+		document.getElementById("spell_list").innerHTML+="<div class='item_container' onclick='spell_list.splice("+q+",1);redraw_board();'>"+spell_list[q][2]+"</div><br>";
+	}
+	
+	document.getElementById("sacspells").innerHTML=gspellselect;
+	document.getElementById("sacspellslot").innerHTML=spellslotelect;
 }
 
+function load_src(){
+	load_ables();load_greater_spells();load_traits();load_weapons();load_doms();
+}
