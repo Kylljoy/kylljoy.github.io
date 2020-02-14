@@ -22,7 +22,6 @@ button{outline:none;background-color:#000;color:#fff;border:0px;padding:2px;bord
 <body onload="load_src();update_board();">
 <script language="javascript" src="greaterspellindex.js"></script>
 <script language="javascript" src="lesserspellindex.js"></script>
-<script language="javascript" src="arcanespellindex.js"></script>
 <script language="javascript" src="sbmaker-js.js"></script>
 </script>
 <center><div style="padding:3px;background-color:#fff;margin:5px;border:1px solid #000;"><h1>The Official Sportsball! Character Generator (OKAK)</h1></div></center>
@@ -241,16 +240,19 @@ Level <select  name="level" id="level" value="1" onchange="update_board()">
 <tr id="sacrificeyes"><td colspan=2>Spell Slots :  <p id="sacspellslot" style="display:inline-block;">0</p><button type="button" style="margin-left:20px;" onclick="if(spellslotelect>0){spellslotelect--;gspellselect+=2;update_board();}">&rarr;</button></td>
 
 
-<td colspan=2><button type="button" style="margin-right:20px;" onclick="if(gspellselect>1&&spellslotelect<(lvltot-1)){gspellselect-=2;spellslotelect++;update_board();}">&larr;</button>School Spells :  <p id="sacspells" style="display:inline-block;">0</p></td></tr>
+<td colspan=2><button type="button" style="margin-right:20px;" onclick="if(gspellselect>1&&spellslotelect<(lvltot)){gspellselect-=2;spellslotelect++;update_board();}">&larr;</button>School Spells :  <p id="sacspells" style="display:inline-block;">0</p></td></tr>
+<tr id="spellnumber"><td colspan=4 id="spellbreakdown"></td></tr>
 
 <tr><td class="hey" colspan=4>Lesser Magic</td></tr>
-<tr><td id="lessermagicno" colspan=4><i>(This Magic Field is Not Available to Your Class)</i></td></tr>
+<tr id="lessermagicno"><td colspan=4><i>(This Magic Field is Not Available to Your Class)</i></td></tr>
 <tr id="lessermagicyes"><td>School : <select id="lmagicschool" value="none" onchange="update_board()"><option value="none">None</option></select></td>
-<td>Spell : <select id="lmagicspell" onchange="update_board()" value="none"><option value="none">None</option></select></td><td><button type="button">Add Spell</button></td></tr>
+<td>Variant : <select id="lmagiclevel" onchange="update_board()" value="nonarcane"><option value="nonarcane">Non-Arcane</option><option value="arcane">Arcane</option></select></td>
+<td>Spell : <select id="lmagicspell" value="none" onchange="update_board()"><option value="none">None</option></select>   <a onclick="lsbox()">(?)</a></td>
+<td><button type="button" onclick="addlspell();">Add Spell</button></td></tr>
 <tr><td class="hey" colspan=4>Religous Dominion</td></tr>
 <tr id="paladinno"><td colspan=4> <i>(This Magic Field is Not Available to Your Class)</i></td></tr>
 <tr id="paladinyes"><td  colspan=2 >Dominion <select id="paladindominion"></select></td><td  colspan=2 >Variant <select id="paladinvariant" value="good"><option value="good">Good</option><option value="evil">Evil</option></select></td></tr>
-<tr><td colspan=4 class="hey">Spell List (Remaining Spell Slots : 0)</td></tr>
+<tr><td colspan=4 class="hey">Spell List (Total Spell Slots : <p id="slotshame" style="display:inline-block">0</p>)</td></tr>
 <tr><td colspan=4><center id="spell_list"></center></td></tr>
 </table>
 </form>
