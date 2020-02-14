@@ -983,7 +983,7 @@ function redraw_board(){
 	
 	document.getElementById("rc_sks").innerHTML="";
 	if(rc_values.length==0){
-		document.getElementById("rc_sks").innerHTML="<tr><td colspan='3'>( No Racial Skills )</td></tr>";
+		document.getElementById("rc_sks").innerHTML="<tr><td colspan='3'>( No Initial Skills )</td></tr>";
 	}
 	else{
 	for(i=0;i<rc_values.length;i+=3){
@@ -1110,7 +1110,7 @@ function redraw_board(){
 	}
 	
 	
-	document.getElementById("spell_list").innerHTML="";
+	document.getElementById("spell_list").innerHTML="<i>(No Spells Selected)</i>";
 	if(spell_list.length>0){
 	document.getElementById("spell_list").innerHTML="(Click to remove a spell)<br>"	
 	}
