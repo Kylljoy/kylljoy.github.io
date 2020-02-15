@@ -251,12 +251,29 @@ Level <select  name="level" id="level" value="1" onchange="update_board()">
 <td><button type="button" onclick="addlspell();">Add Spell</button></td></tr>
 <tr><td class="hey" colspan=4>Religous Dominion</td></tr>
 <tr id="paladinno"><td colspan=4> <i>(This Magic Field is Not Available to Your Class)</i></td></tr>
-<tr id="paladinyes"><td  colspan=2 >Dominion <select id="paladindominion"></select></td><td  colspan=2 >Variant <select id="paladinvariant" value="good"><option value="good">Good</option><option value="evil">Evil</option></select></td></tr>
+<tr id="paladinyes"><td  colspan=2 >Dominion <select id="paladindominion"></select></td><td  colspan=2 >Variant <select id="paladinvariant" value="Good"><option value="Good">Good</option><option value="Evil">Evil</option></select></td></tr>
 <tr><td colspan=4 class="hey">Spell List (Total Spell Slots : <p id="slotshame" style="display:inline-block">0</p>)</td></tr>
 <tr><td colspan=4><center id="spell_list"></center></td></tr>
 </table>
 </form>
 </div></center>
+
+<div style="padding:3px;background-color:#fff;margin:15px;border:1px solid #000;">
+<center><h1>Part 4 : Compile Character!</h1><br>
+<button style="padding:10px;width:30%;font-size:1.5em;border-radius:20px;" onclick="compile_character()">Let's Sportsball!</button>
+<br><br>
+
+<div id="character_summary" style="padding:5px;width:70%;border:2px solid black;border-radius:10px;">
+<i>(Click the Button Above to Get Your Character)</i>
+</div>
+
+
+
+
+</center>
+
+
+</div>
 
 
 </body>

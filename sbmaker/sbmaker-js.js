@@ -30,6 +30,8 @@ var cori=0;
 var chri=0;
 var heali=0;
 
+var download_compile="";
+
 
 var weapondamage=0;
 var weaponrange=0;
@@ -62,6 +64,12 @@ var allocchange=false;
 var weapontype="";
 var weaponname=""; 
 
+var racemap={"man":"Human","helf":"High Elf","delf":"Dark Elf","welf":"Wood Elf","alf":"Half-Elf",
+"hord":"Half Desert Orc","hodk":"Half Dark Orc","horm":"Half Mountain Orc","gnom":"Gnome",
+"durf":"Dwarf"
+};
+
+var langmap={ "eng":"Anglish", "elf":"Elven", "orc":"Okran", "durf":"Dwarf-Tongue", "nom":"Nom", "run":"Runic"};
 
 var melee={};
 var ranged={};
@@ -250,6 +258,39 @@ function skadd(val){
 				}
 		}
 		return 10;
+}
+
+function reladd(skillname){
+	switch(skillname){
+		case "med":
+		case "sur":
+		case "rep":
+		case "inv":
+		case "loc":
+			return stadd(cogf);
+			break;
+		case "sle":
+		case "stl":
+		case "pic":
+			return stadd(corf);
+			break;
+		case "for":
+		case "str":
+		case "int":
+			return stadd(phsf);
+			break;
+		case "spe":
+		case "spc":
+		case "spe1":
+		case "spe2":
+		case "spe3":
+			return stadd(chrf);
+			break;
+		default:
+			return -1;
+			break;
+	}
+	
 }
 
 function stadd(val){
@@ -1092,7 +1133,7 @@ function redraw_board(){
 		}
 	}
 	
-	if(document.getElementById("class").value=="paladin"&&document.getElementById("level").value<5){
+	if(document.getElementById("class").value=="paladin"&&document.getElementById("level").value<5&&gtn()!="Magician"){
 			document.getElementById("lmagiclevel").value="nonarcane";
 	}
 	
@@ -1132,4 +1173,127 @@ function redraw_board(){
 
 function load_src(){
 	load_ables();load_greater_spells();load_traits();load_weapons();load_doms();load_lesser_spells();
+}
+
+
+function add_tag(tagname,tagvalue){
+		download_compile+=tagname + " : "+tagvalue+"\n";
+}
+
+function segbreak(){
+		download_compile+="\n\n";
+}
+
+function seghead(head){
+		download_compile+=head.toUpperCase()+"\n";
+}
+
+function add_list(name,listitems){
+		download_compile+=name+" : \n";
+		for(let mark=0;mark<listitems.length;mark++){
+			download_compile+=" - "+listitems[mark]+"\n";
+		}
+	
+}
+
+function compile_character(){
+	
+	download_compile="";
+	finale=document.getElementById("character_summary");
+	finale.innerHTML="<h2>"+(document.getElementById("name").value=="" ? "No-Name Johnson":document.getElementById("name").value)+"</h2>";
+	finale.innerHTML+="<h4>Level "+document.getElementById("level").value+" "+racemap[document.getElementById("race").value]+" "+document.getElementById("class").value+"</h4>";
+	finale.innerHTML+="<h4>Trait : "+(document.getElementById("trait").value=="none" ? "N/A" : document.getElementById("trait").value)+" | Ability : "+(document.getElementById("able").value=="none" ? "N/A" : document.getElementById("able").value);
+	finale.innerHTML+="<br><h3>Statistics</h3>";
+	finale.innerHTML+="<br><b>Health : "+healf+"</b>";
+	finale.innerHTML+="<table><tr class='hey'><td></td><td>Physicality</td><td>Cognition</td><td>Coordination</td><td>Charisma</td></tr><tr><td class='hey'>Scores</td><td>"+phsf+"</td><td>"+cogf+"</td><td>"+corf+"</td><td>"+chrf+"</td></tr><tr><td class='hey'>Modifiers</td><td>"+stadd(phsf)+"</td><td>"+stadd(cogf)+"</td><td>"+stadd(corf)+"</td><td>"+stadd(chrf)+"</td></tr></table>";
+	
+	finale.innerHTML+="<br><h3>Skills</h3><br>";
+	skscores=[];
+	sklabels=[];
+	for(let q=0;q<Object.keys(fin_sks).length;q++){
+		skscores.push(fin_sks[Object.keys(fin_sks)[q]]);
+		sklabels.push(sks_map[Object.keys(fin_sks)[q]]);
+	}
+	skadds=[];
+	for(let q=0;q<Object.keys(fin_sks).length;q++){
+		skadds.push(Math.max(skadd(fin_sks[Object.keys(fin_sks)[q]]),reladd(Object.keys(fin_sks)[q])));
+	}
+	sk_table_data="<table><tr class='hey'><td>Skill</td><td>Score</td><td>Modifier</td></tr>";
+	for(let q=0;q<skadds.length;q++){
+		sk_table_data+="<tr><td class='hey'>"+sklabels[q]+"</td><td>"+skscores[q]+"</td><td>"+skadds[q]+"</td></tr>";
+		
+	}
+	finale.innerHTML+=sk_table_data+"</table><br><h3>Languages : </h3><br>";
+	finale.innerHTML+="First Language : "+langmap[document.getElementById("lang1").value]+"<br>";
+	finale.innerHTML+="Second Language : " +langmap[document.getElementById("lang2").value]+"<br>";
+	finale.innerHTML+="Third Language : " +langmap[document.getElementById("lang3").value]+"<br>";
+	
+	finale.innerHTML+="<br><br><h2>Inventory</h2><br><h3>Weapon of Choice:</h3>";
+	finale.innerHTML+="<b>"+weaponname+" (Base Damage : "+(document.getElementById("weapontype").value=="m"? melee[document.getElementById("weapon").value]:(document.getElementById("weapontype").value=="r"? ranged[document.getElementById("weapon").value] : casted[document.getElementById("weapon").value]))["atk"]+" | Total Damage : "+weapondamage+" | Range : "+(document.getElementById("weapontype").value=="m"? melee[document.getElementById("weapon").value]:(document.getElementById("weapontype").value=="r"? ranged[document.getElementById("weapon").value] : casted[document.getElementById("weapon").value]))["rng"]+")</b>";
+	
+	finale.innerHTML+="<br><br><h2>Magic</h2>";
+	finale.innerHTML+="Total Spell Slots :"+totalspellslots;
+	finale.innerHTML+="<br><br><h3>Spell Roster</h3><ul>";
+	spells_final=[];
+	if(spell_list.length<=0){
+			finale.innerHTML+="<i>(No Spells)</i>";
+	}
+	for(let q=0;q<spell_list.length;q++){
+		finale.innerHTML+="<li>"+spell_list[q][2]+"</li>";
+		spells_final.push(spell_list[q][2]);
+	}
+	finale.innerHTML+="</ul>";
+	finale.innerHTML+="<br><br><h2>Religious Affiliation</h2>";
+	if(ord){
+				finale.innerHTML+=document.getElementById("paladinvariant").value+" / "+document.getElementById("paladindominion").value;
+	}else{
+			finale.innerHTML+="<i>(No Religious Affiliation)</i>";
+	}
+	
+	//Download File Stuff
+	
+	add_tag("Name",(document.getElementById("name").value=="" ? "No-Name Johnson":document.getElementById("name").value));
+	add_tag("Level",document.getElementById("level").value);
+	add_tag("Race",racemap[document.getElementById("race").value]);
+	add_tag("Class",document.getElementById("class").value);
+	add_tag("Trait",document.getElementById("trait").value);
+	add_tag("Ability",document.getElementById("able").value);
+	segbreak();
+	seghead("Statistics");
+	add_tag("Health",healf);
+	add_tag("Physicality",phsf+" , "+stadd(phsf));
+	add_tag("Cognition",cogf+" , "+stadd(cogf));
+	add_tag("Coordination",corf+" , "+stadd(corf));
+	add_tag("Charisma",chrf+" , "+stadd(chrf));
+	segbreak();
+	seghead("Skills");
+	for(let q=0;q<skscores.length;q++){
+		add_tag(sklabels[q],skscores[q]+" , "+skadds[q]);
+	}
+	add_tag("First Language",langmap[document.getElementById("lang1").value]);
+	add_tag("Second Language",langmap[document.getElementById("lang2").value]);
+	add_tag("Third Language",langmap[document.getElementById("lang3").value]);
+	segbreak();
+	seghead("Inventory");
+	add_tag("Weapon",weaponname);
+	add_tag("Base Damage",(document.getElementById("weapontype").value=="m"? melee[document.getElementById("weapon").value]:(document.getElementById("weapontype").value=="r"? ranged[document.getElementById("weapon").value] : casted[document.getElementById("weapon").value]))["atk"]);
+	add_tag("Range",(document.getElementById("weapontype").value=="m"? melee[document.getElementById("weapon").value]:(document.getElementById("weapontype").value=="r"? ranged[document.getElementById("weapon").value] : casted[document.getElementById("weapon").value]))["rng"]);
+	segbreak();
+	seghead("Magic");
+	add_tag("Spell Slots",totalspellslots);
+	add_list("Spells",spells_final);
+	add_tag("Religious Affiliation",document.getElementById("paladindominion").value+" / "+document.getElementById("paladinvariant").value);
+	
+	finale.innerHTML+="<br><br><button style='font-size:1.75em;' onclick='download_character()'>LET'S DO THIS!</button>";
+}
+
+
+function download_character(){
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(download_compile));
+  element.setAttribute('download', (document.getElementById("name").value=="" ? "No-Name Johnson":document.getElementById("name").value).toLowerCase()+"_sbmap.txt");
+  element.style.display = 'none';
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
 }
