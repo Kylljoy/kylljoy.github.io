@@ -304,13 +304,13 @@ function reladd(skillname){
 }
 
 function stadd(val){
-		let levelsq=[1,2,3,4,5,7,9,14,19,25,32,40];
+		let levelsq=[1,2,3,4,5];
 		for(let i=0;i<levelsq.length;i++){
 				if(val<levelsq[i]){
 						return i-2;
 				}
 		}
-		return 10;
+		return Math.floor(val/2);
 }
 
 function getskp(){
@@ -824,7 +824,7 @@ function update_board(){
 		cogpoints=0;
 		corpoints=0;
 		chrpoints=0;
-		statpoints=1+Math.floor(document.getElementById("level").value/3);
+		statpoints=1+Math.floor(document.getElementById("level").value/4);
 	}	
 
 	if(gtn()=="Fast Learner"){
