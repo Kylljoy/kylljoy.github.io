@@ -815,6 +815,7 @@ function update_board(){
 			class_chr=cs_chr;
 			class_health=cs_heal;
 			cls_act=cs_sks.slice();
+			ols=document.getElementById("cs_lm").checked;
 			cls_tg="";
 			boostcount+=1;
 	}
