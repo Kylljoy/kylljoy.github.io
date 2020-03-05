@@ -15,8 +15,10 @@ button{outline:none;background-color:#000;color:#fff;border:0px;padding:2px;bord
 .output {border:0px;text-align:center;width:25px;outline:none;}
 .greyout {display:none;left:0;top:0;width:100%;height:100vh;position:fixed;background-color:rgba(0,0,0,0.5);}
 .infobox{line-spacing:2em;align:center;position:absolute;z-index:99;background-color:#fff;color:#000;border:2px solid #000;padding:1em;height:50vh;margin:auto;top:0;bottom:0;left:0;right:0;width:50vw;}
+.longboi{height:70vh;}
 #lessermagicyes, #sacraficeyes, #greatermagicyes, #paladinyes {display:none;}
 .item_container{border:1px solid black;border-radius:5px;width:50%;padding:5px;}
+.inlinecheckbox{margin-left:1em;}
 
 </style>
 <body onload="load_src();update_board();">
@@ -24,11 +26,29 @@ button{outline:none;background-color:#000;color:#fff;border:0px;padding:2px;bord
 <script language="javascript" src="lesserspellindex.js"></script>
 <script language="javascript" src="sbmaker-js.js"></script>
 </script>
-<center><div style="padding:3px;background-color:#fff;margin:5px;border:1px solid #000;"><h1>The Official Sportsball! Character Generator (OKAK)</h1></div></center>
+<center><div style="padding:3px;background-color:#fff;margin:5px;border:1px solid #000;"><h1>The Official Sportsball! Character Generator (V/LRB)</h1></div></center>
 
 <center><div style="padding:3px;background-color:#fff;margin:15px;border:1px solid #000;">
 <form method="get">
 <table>
+<center><div class="greyout" id="custom_grey"><div id="custom_box" class="infobox longboi"><div id="informat">
+Set Custom Class Superparameters:
+<br><br>
+<input size=15 id="cs_name" placeholder="Class Name"></input><br>
+<br>
+Physicality <input size=2 id="cs_phs"></input><br>
+Cognition  <input size=2 id="cs_cog"></input><br>
+Coordination  <input size=2 id="cs_cor"></input><br>
+Charisma  <input size=2 id="cs_chr"></input><br>
+Health <input size=2 id="cs_heal"></input><br><br>
+Class Skills (Check All That Apply)<br><br>
+<div id="cs_cls_sks">
+
+</div><br><br>
+Skill Points Per Level <input size=2 id="cs_skm"></input><br>
+
+
+</div><div><button onclick="cubox()" style="margin-top:2em;" type="button">Apply</button></div></div></div></center>
 <tr><td colspan=5 class="hey"><h3>Part 1: Character, Class, Race, and Stats</h3></td></tr>
 <tr><td colspan=5 class="hey"><b>Character, Class, Race, Level</b></td></tr>
 <tr>
@@ -69,7 +89,8 @@ Level <select  name="level" id="level" value="1" onchange="update_board()">
 <option value="thief">Thief</option>
 <option value="smith">Smith</option>
 <option value="mage">Mage</option>
-</select></center></td>
+<option value="cs">Custom</option>
+</select>  <a onclick="cobox()">*</a></center></td>
 </tr>
 <tr>
 <td colspan=2>Trait <select id="trait" name="trait" value="none" onchange="update_board()"><option value="none">None</option></select>   <a onclick="tbox()">(?)</a></td>

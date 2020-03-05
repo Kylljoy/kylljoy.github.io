@@ -2,6 +2,16 @@ var class_phs=0;
 var class_cog=0;
 var class_chr=0;
 var class_cor=0;
+
+var cs_phs=0;
+var cs_cog=0;
+var cs_chr=0;
+var cs_cor=0;
+var cs_heal=0;
+var cs_sks=[];
+var cs_skm=10;
+
+
 var race_phs=0;
 var race_cog=0;
 var race_chr=0;
@@ -248,16 +258,16 @@ function updatename(){
 
 
 function skadd(val){
-		if(val==0){
-				return -1;
+		if(val==0||val==1){
+				return val-1;
 		}
-		let levels=[1,9,25,66,161,381,901,2051,4601,10001];
+		let levels=[1,4,14,29,49,74,99];
 		for(let i=0;i<levels.length;i++){
 				if(val<=levels[i]){
-						return i;
+						return i-1;
 				}
 		}
-		return 10;
+		return 6;
 }
 
 function reladd(skillname){
@@ -294,7 +304,7 @@ function reladd(skillname){
 }
 
 function stadd(val){
-		let levelsq=[1,2,3,4,5,7,9,12,15,19,24,30];
+		let levelsq=[1,2,3,4,5,7,9,14,19,25,32,40];
 		for(let i=0;i<levelsq.length;i++){
 				if(val<levelsq[i]){
 						return i-2;
@@ -310,26 +320,19 @@ function getskp(){
 			case "mercenary":
 			case "marksman":
 			case "assassin":
-				multiplier=4;
+				multiplier=8;
 			break;
 			case "diplomat":
 			case "thief":
 			case "smith":
 			case "mage":
-				multiplier=6;
+				multiplier=14;
+				break;
+			case "cs":
+				multiplier=cs_skm;
+				break;
 	}
-	var high_stat=cogf;
-	var low_stat=cogi;
-	var total=0;
-	var current_stat=cogi;
-	for(let i=0;i<document.getElementById("level").value;i++){
-		total+=Math.max(stadd(current_stat),0)+1;
-		if(current_stat!==high_stat){
-				current_stat++;
-		}
-	}
-	
-	return multiplier*total;
+	return multiplier*document.getElementById("level").value;
 	
 }
 function alllang(){
@@ -416,6 +419,27 @@ function clearlangs(){
 
 function cbox(){
 	document.getElementById("grey").style.display="none";
+}
+
+
+
+function cubox(){
+		cs_phs=parseInt(document.getElementById("cs_phs").value);
+		cs_cog=parseInt(document.getElementById("cs_cog").value);
+		cs_cor=parseInt(document.getElementById("cs_cor").value);
+		cs_chr=parseInt(document.getElementById("cs_chr").value);
+		cs_heal=parseInt(document.getElementById("cs_heal").value);
+		cs_skm=parseInt(document.getElementById("cs_skm").value);
+		document.getElementById("custom_grey").style.display="none";
+		for(let g=0;g<document.getElementById("cs_cls_sks").children.length;g++){
+			if(document.getElementById("cs_cls_sks").children[g].checked){
+					cs_sks.push(document.getElementById("cs_cls_sks").children[g].id.substr(10));
+			}
+		}
+		update_board();
+}
+function cobox(){
+		document.getElementById("custom_grey").style.display="block";
 }
 
 function tbox(){
@@ -785,11 +809,12 @@ function update_board(){
 			totalspellslots+=2;
 			break;
 		default:
-			class_phs=0;
-			class_cog=0;
-			class_cor=0;
-			class_chr=0;
-			class_health=6;
+			class_phs=cs_phs;
+			class_cog=cs_cog;
+			class_cor=cs_cor;
+			class_chr=cs_chr;
+			class_health=cs_heal;
+			cls_act=cs_sks.slice();
 			cls_tg="";
 			boostcount+=1;
 	}
@@ -799,7 +824,7 @@ function update_board(){
 		cogpoints=0;
 		corpoints=0;
 		chrpoints=0;
-		statpoints=1*document.getElementById("level").value;
+		statpoints=1+Math.floor(document.getElementById("level").value/3);
 	}	
 
 	if(gtn()=="Fast Learner"){
@@ -1173,6 +1198,14 @@ function redraw_board(){
 
 function load_src(){
 	load_ables();load_greater_spells();load_traits();load_weapons();load_doms();load_lesser_spells();
+	
+	for(let m=0;m<cls_sks.length;m++){
+			document.getElementById("cs_cls_sks").appendChild(document.createElement("input"));
+			document.getElementById("cs_cls_sks").lastChild.type="checkbox";
+			document.getElementById("cs_cls_sks").lastChild.classList.add("inlinecheckbox");
+			document.getElementById("cs_cls_sks").lastChild.id="cs_accept_"+cls_sks[m];
+			document.getElementById("cs_cls_sks").innerHTML+=sks_map[cls_sks[m]];
+	}
 }
 
 
@@ -1201,7 +1234,7 @@ function compile_character(){
 	download_compile="";
 	finale=document.getElementById("character_summary");
 	finale.innerHTML="<h2>"+(document.getElementById("name").value=="" ? "No-Name Johnson":document.getElementById("name").value)+"</h2>";
-	finale.innerHTML+="<h4>Level "+document.getElementById("level").value+" "+racemap[document.getElementById("race").value]+" "+document.getElementById("class").value+"</h4>";
+	finale.innerHTML+="<h4>Level "+document.getElementById("level").value+" "+racemap[document.getElementById("race").value]+" "+(document.getElementById("class").value="cs"? document.getElementById("cs_name").value : document.getElementById("class").value)+"</h4>";
 	finale.innerHTML+="<h4>Trait : "+(document.getElementById("trait").value=="none" ? "N/A" : document.getElementById("trait").value)+" | Ability : "+(document.getElementById("able").value=="none" ? "N/A" : document.getElementById("able").value);
 	finale.innerHTML+="<br><h3>Statistics</h3>";
 	finale.innerHTML+="<br><b>Health : "+healf+"</b>";
@@ -1255,7 +1288,7 @@ function compile_character(){
 	add_tag("Name",(document.getElementById("name").value=="" ? "No-Name Johnson":document.getElementById("name").value));
 	add_tag("Level",document.getElementById("level").value);
 	add_tag("Race",racemap[document.getElementById("race").value]);
-	add_tag("Class",document.getElementById("class").value);
+	add_tag("Class",(document.getElementById("class").value="cs"? document.getElementById("cs_name").value : document.getElementById("class").value));
 	add_tag("Trait",document.getElementById("trait").value);
 	add_tag("Ability",document.getElementById("able").value);
 	segbreak();
