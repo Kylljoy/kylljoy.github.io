@@ -1318,9 +1318,13 @@ function compile_character(){
 	add_list("Spells",spells_final);
 	add_tag("Religious Affiliation",document.getElementById("paladindominion").value+" / "+document.getElementById("paladinvariant").value);
 	
-	finale.innerHTML+="<br><br><button style='font-size:1.75em;' onclick='download_character()'>LET'S DO THIS!</button>";
+	finale.innerHTML+="<br><br><button style='font-size:1.75em;' onclick='download_character()'>Download Character Sheet</button><br><br><button style='font-size:1em;' onclick='text_character()'>Just Text</button>";
 }
 
+function text_character(){
+	finale.innerHTML+="<div style='border:1px black solid;padding:5px;'>"+download_compile.replace(/\n/g,"<br>")+"</div>";
+	
+}
 
 function download_character(){
   var element = document.createElement('a');
