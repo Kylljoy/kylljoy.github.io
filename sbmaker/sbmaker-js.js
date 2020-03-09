@@ -1235,7 +1235,7 @@ function compile_character(){
 	download_compile="";
 	finale=document.getElementById("character_summary");
 	finale.innerHTML="<h2>"+(document.getElementById("name").value=="" ? "No-Name Johnson":document.getElementById("name").value)+"</h2>";
-	finale.innerHTML+="<h4>Level "+document.getElementById("level").value+" "+racemap[document.getElementById("race").value]+" "+(document.getElementById("class").value="cs"? document.getElementById("cs_name").value : document.getElementById("class").value)+"</h4>";
+	finale.innerHTML+="<h4>Level "+document.getElementById("level").value+" "+racemap[document.getElementById("race").value]+" "+(document.getElementById("class").value=="cs"? document.getElementById("cs_name").value : document.getElementById("class").value)+"</h4>";
 	finale.innerHTML+="<h4>Trait : "+(document.getElementById("trait").value=="none" ? "N/A" : document.getElementById("trait").value)+" | Ability : "+(document.getElementById("able").value=="none" ? "N/A" : document.getElementById("able").value);
 	finale.innerHTML+="<br><h3>Statistics</h3>";
 	finale.innerHTML+="<br><b>Health : "+healf+"</b>";
@@ -1289,7 +1289,7 @@ function compile_character(){
 	add_tag("Name",(document.getElementById("name").value=="" ? "No-Name Johnson":document.getElementById("name").value));
 	add_tag("Level",document.getElementById("level").value);
 	add_tag("Race",racemap[document.getElementById("race").value]);
-	add_tag("Class",(document.getElementById("class").value="cs"? document.getElementById("cs_name").value : document.getElementById("class").value));
+	add_tag("Class",(document.getElementById("class").value=="cs"? document.getElementById("cs_name").value : document.getElementById("class").value));
 	add_tag("Trait",document.getElementById("trait").value);
 	add_tag("Ability",document.getElementById("able").value);
 	segbreak();
