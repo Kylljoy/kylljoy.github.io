@@ -1,15 +1,17 @@
 *{margin:0px;padding:0px;font-family:"Arial",monospace;}
-#headerbar{margin-left:15px;background-image:linear-gradient(#9999ff,#ff9999);padding:0px;display:inline-block;}
-#headerbar h3, #headerbar h1{padding:30px;width:80%;color:#000;display:inline-block;background:#fff;mix-blend-mode:screen;}
-
+#headerbar{margin-left:15px;background-image:linear-gradient(#8888ff,#ff8888);padding:0px;display:inline-block;}
+#headerbar h1{width:100%;padding-top:30px;padding-left:30px;padding-bottom:10px;color:#000;display:inline-block;background:#fff;mix-blend-mode:screen;font-family:'Montserrat',sans-serif}
+#headerbar h3{color:#000;display:inline-block;padding-left:30px;background:#fff;mix-blend-mode:screen;font-family:'Montserrat',sans-serif}
 body{background-size:cover;background-repeat:no-repeat;background-image:linear-gradient(#9999ff,#ff9999);height:100vh}
-#subheader{display:inline-block;background-image:linear-gradient(#9999ff,#ff9999);float:right;margin:30px;margin-right:50px;}
-#subheadercover{height:100%;color:#000;background-color:#fff;mix-blend-mode:screen;}
-#subheadercover a{text-decoration:overline;font-family:"Share Tech Mono",monospace;text-align:center;background:#fff;margin:10px;}
-#master{width:80vw;border-radius:15px;margin-left:10vw;background-color:#fff;margin-top:5px;color:#000;}
+#subheader{max-width:150px;min-width:150px;background-image:linear-gradient(#8888ff,#ff8888);margin-top:30px;height:100%;}
+#subheadercover{height:100%;background:#fff;mix-blend-mode:screen;max-width:200px;}
+#subheadercover a{display:inline-block;vertical-align:middle;text-decoration:none;}
+
+#master{width:80vw;border-radius:15px;margin-left:10vw;background-color:#fff;margin-top:5px;color:#000;padding-bottom:5px;}
 h1 {color:#000;}
 #content {margin:10px;border:#ddd 1px solid;background:#fff;border-radius:30px;}
 .textbox {margin:5px;background-color:#000;color:#009900;border:#ffffff 1px solid;border-radius:3px;padding:5px;}
 .outbox { margin:5px;background-color:#000;color:#009900;border:#ffffff 1px solid;border-radius:3px;padding:5px;}
 .outbox a{color:#ffffff;text-decoration:underline;}
 .usage {margin:15px;background-color:#000;color:#999900;border:#ffffff 1px solid;border-radius:3px;padding:5px;}
+.box-standard {background:#ddd;margin:10px;padding:10px;border-radius:5px;border:#aaa 1px solid;}
