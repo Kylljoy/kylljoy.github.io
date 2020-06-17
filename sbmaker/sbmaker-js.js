@@ -1242,6 +1242,7 @@ function compile_character(){
 	finale.innerHTML+="<table><tr class='hey'><td></td><td>Physicality</td><td>Cognition</td><td>Coordination</td><td>Charisma</td></tr><tr><td class='hey'>Scores</td><td>"+phsf+"</td><td>"+cogf+"</td><td>"+corf+"</td><td>"+chrf+"</td></tr><tr><td class='hey'>Modifiers</td><td>"+stadd(phsf)+"</td><td>"+stadd(cogf)+"</td><td>"+stadd(corf)+"</td><td>"+stadd(chrf)+"</td></tr></table>";
 	
 	finale.innerHTML+="<br><h3>Skills</h3><br>";
+	finale.innerHTML+="Boosted Skills: "+document.getElementById("boost1").value+", "+document.getElementById("boost2").value+", "+document.getElementById("boost3").value;
 	skscores=[];
 	sklabels=[];
 	for(let q=0;q<Object.keys(fin_sks).length;q++){
@@ -1301,6 +1302,7 @@ function compile_character(){
 	add_tag("Charisma",chrf+" , "+stadd(chrf));
 	segbreak();
 	seghead("Skills");
+	add_tag("Boosted",document.getElementById("boost1").value+", "+document.getElementById("boost2").value+", "+document.getElementById("boost3").value);
 	for(let q=0;q<skscores.length;q++){
 		add_tag(sklabels[q],skscores[q]+" , "+skadds[q]);
 	}
