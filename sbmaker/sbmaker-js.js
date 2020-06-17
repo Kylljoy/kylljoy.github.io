@@ -424,12 +424,12 @@ function cbox(){
 
 
 function cubox(){
-		cs_phs=parseInt(document.getElementById("cs_phs").value);
-		cs_cog=parseInt(document.getElementById("cs_cog").value);
-		cs_cor=parseInt(document.getElementById("cs_cor").value);
-		cs_chr=parseInt(document.getElementById("cs_chr").value);
-		cs_heal=parseInt(document.getElementById("cs_heal").value);
-		cs_skm=parseInt(document.getElementById("cs_skm").value);
+		cs_phs=parseInt(document.getElementById("cs_phs").value ? document.getElementById("cs_phs").value : "0");
+		cs_cog=parseInt(document.getElementById("cs_cog").value ? document.getElementById("cs_cog").value : "0");
+		cs_cor=parseInt(document.getElementById("cs_cor").value ? document.getElementById("cs_cor").value : "0");
+		cs_chr=parseInt(document.getElementById("cs_chr").value ? document.getElementById("cs_chr").value : "0");
+		cs_heal=parseInt(document.getElementById("cs_heal").value ? document.getElementById("cs_heal").value : "0");
+		cs_skm=parseInt(document.getElementById("cs_skm").value ? document.getElementById("cs_skm").value : "0");
 		document.getElementById("custom_grey").style.display="none";
 		for(let g=0;g<document.getElementById("cs_cls_sks").children.length;g++){
 			if(document.getElementById("cs_cls_sks").children[g].checked){
@@ -438,8 +438,17 @@ function cubox(){
 		}
 		update_board();
 }
+
+function curbox(){
+		document.getElementById("custom_race_grey").style.display="none";
+		update_board();
+}
 function cobox(){
 		document.getElementById("custom_grey").style.display="block";
+}
+
+function crbox(){
+		document.getElementById("custom_race_grey").style.display="block";
 }
 
 function tbox(){
@@ -716,6 +725,15 @@ function update_board(){
 			race_chr=2;
 		break;
 		
+		case "othr":
+			race_phs=parseInt(document.getElementById("cr_phs").value ? document.getElementById("cr_phs").value : "0");
+			race_cor=parseInt(document.getElementById("cr_cor").value ? document.getElementById("cr_cor").value : "0");
+			race_cog=parseInt(document.getElementById("cr_cog").value ? document.getElementById("cr_cog").value : "0");
+			race_chr=parseInt(document.getElementById("cr_chr").value ? document.getElementById("cr_chr").value : "0");
+			Array.prototype.slice.call(document.getElementById("cs_rce_sks").children).forEach(item=>Array.prototype.slice.call(item.children).forEach(function(p){rc_sks[p.lastChild.id.split("_")[3]]=parseInt(p.lastChild.value ? p.lastChild.value : "0");}));
+			
+		break;
+		
 	}
 
 	// Class Stats
@@ -838,11 +856,11 @@ function update_board(){
 	
 	//Load Initial Stats
 	
-	phsi=Math.max(class_phs+race_phs,0);
-	cogi=Math.max(class_cog+race_cog,0);
-	cori=Math.max(class_cor+race_cor,0);
-	chri=Math.max(class_chr+race_chr,0);
-	heali=Math.max(class_health+race_health,0);
+	phsi=class_phs+race_phs;
+	cogi=class_cog+race_cog;
+	cori=class_cor+race_cor;
+	chri=class_chr+race_chr;
+	heali=class_health+race_health;
 	
 	//Load Initial Skill Investments
 	
@@ -1199,6 +1217,26 @@ function redraw_board(){
 
 function load_src(){
 	load_ables();load_greater_spells();load_traits();load_weapons();load_doms();load_lesser_spells();
+	rce_table=0;
+	for(let m=0;m<gen_sks.length;m++){
+			document.getElementById("cs_rce_sks").lastChild.appendChild(document.createElement("div"));
+			document.getElementById("cs_rce_sks").lastChild.lastChild.style="display:table-cell;";		
+			document.getElementById("cs_rce_sks").lastChild.lastChild.innerHTML+=sks_map[gen_sks[m]]+"        ";
+			
+			
+			document.getElementById("cs_rce_sks").lastChild.lastChild.appendChild(document.createElement("input"));
+			document.getElementById("cs_rce_sks").lastChild.lastChild.lastChild.size=1;
+			document.getElementById("cs_rce_sks").lastChild.lastChild.lastChild.style="font-size:12px;";
+			document.getElementById("cs_rce_sks").lastChild.lastChild.lastChild.id="cs_rce_bon_"+gen_sks[m];
+
+			rce_table++;
+			if(rce_table>=3){
+				document.getElementById("cs_rce_sks").appendChild(document.createElement("div"));
+				document.getElementById("cs_rce_sks").lastChild.style="display:table-row;";
+				rce_table=0;
+			}
+			
+	}
 	
 	for(let m=0;m<cls_sks.length;m++){
 			document.getElementById("cs_cls_sks").appendChild(document.createElement("input"));
@@ -1206,6 +1244,25 @@ function load_src(){
 			document.getElementById("cs_cls_sks").lastChild.classList.add("inlinecheckbox");
 			document.getElementById("cs_cls_sks").lastChild.id="cs_accept_"+cls_sks[m];
 			document.getElementById("cs_cls_sks").innerHTML+=sks_map[cls_sks[m]];
+			
+			document.getElementById("cs_rce_sks").lastChild.appendChild(document.createElement("div"));
+			document.getElementById("cs_rce_sks").lastChild.lastChild.style="display:table-cell;";		
+			document.getElementById("cs_rce_sks").lastChild.lastChild.innerHTML+=sks_map[cls_sks[m]]+"        ";
+			
+			
+			document.getElementById("cs_rce_sks").lastChild.lastChild.appendChild(document.createElement("input"));
+			document.getElementById("cs_rce_sks").lastChild.lastChild.lastChild.size=1;
+			document.getElementById("cs_rce_sks").lastChild.lastChild.lastChild.style="font-size:12px;";
+			document.getElementById("cs_rce_sks").lastChild.lastChild.lastChild.id="cs_rce_bon_"+cls_sks[m];
+
+			rce_table++;
+			if(rce_table>=3){
+				document.getElementById("cs_rce_sks").appendChild(document.createElement("div"));
+				document.getElementById("cs_rce_sks").lastChild.style="display:table-row;";
+				rce_table=0;
+				
+			}
+			
 	}
 }
 
@@ -1235,7 +1292,7 @@ function compile_character(){
 	download_compile="";
 	finale=document.getElementById("character_summary");
 	finale.innerHTML="<h2>"+(document.getElementById("name").value=="" ? "No-Name Johnson":document.getElementById("name").value)+"</h2>";
-	finale.innerHTML+="<h4>Level "+document.getElementById("level").value+" "+racemap[document.getElementById("race").value]+" "+(document.getElementById("class").value=="cs"? document.getElementById("cs_name").value : document.getElementById("class").value)+"</h4>";
+	finale.innerHTML+="<h4>Level "+document.getElementById("level").value+" "+(document.getElementById("race").value=="othr"? document.getElementById("cr_name").value : racemap[document.getElementById("race").value])+" "+(document.getElementById("class").value=="cs"? document.getElementById("cs_name").value : document.getElementById("class").value)+"</h4>";
 	finale.innerHTML+="<h4>Trait : "+(document.getElementById("trait").value=="none" ? "N/A" : document.getElementById("trait").value)+" | Ability : "+(document.getElementById("able").value=="none" ? "N/A" : document.getElementById("able").value);
 	finale.innerHTML+="<br><h3>Statistics</h3>";
 	finale.innerHTML+="<br><b>Health : "+healf+"</b>";
@@ -1289,7 +1346,7 @@ function compile_character(){
 	
 	add_tag("Name",(document.getElementById("name").value=="" ? "No-Name Johnson":document.getElementById("name").value));
 	add_tag("Level",document.getElementById("level").value);
-	add_tag("Race",racemap[document.getElementById("race").value]);
+	add_tag("Race",(document.getElementById("race").value=="othr"? document.getElementById("cr_name").value : racemap[document.getElementById("race").value]));
 	add_tag("Class",(document.getElementById("class").value=="cs"? document.getElementById("cs_name").value : document.getElementById("class").value));
 	add_tag("Trait",document.getElementById("trait").value);
 	add_tag("Ability",document.getElementById("able").value);
