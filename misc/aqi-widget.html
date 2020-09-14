@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<title>Malboro Index</title>
+<body>
+<center><h1>The Malboro Index</h1></center>
+<p>This is the Malboro Index, something I programmed in about 20 minutes, based on a cursory glance at some AQI API's, and a very, very basic understanding of converting AQI to micrgrams-per-cubic-meter. In short, I'm using a free, slow API with a very janky power series estimator to get an AQI, estimating it in micrograms-per-cubic meter, and then using that to estimate how many cigarettes are being smoked. So, y'know, take this with a grain of salt. (It can take up to ten seconds to calculate the index)</p>
+<center><button onclick="getIndex()" style="background-color:#f00;color:#fff;border:1px #fff solid;padding:10px;">Calculate My Malboro Index</button><br><br><br><hr>
+<h2>You Are Smoking Roughly <span id="cig_label">0</span> Cigarettes per Day</h2><br><h4>(Give or take one or two cigarettes)</h4></center>
+<script>
+
+	function getIndex(){
+		fetch("https://api.waqi.info/feed/here/?token=08f08e2d6b389e850ed25ff2f88e3425da84f66b").then(data=>data.json()).then(aqi=>Math.round(0.0127*Math.pow(aqi["data"]["iaqi"]["pm25"]["v"],1.73))).then(mg=>(document.getElementById("cig_label").innerHTML=Math.round((mg/22))));
+
+	}
+
+
+
+
+</script>
+</body>
+</html>
