@@ -2,7 +2,7 @@
 #headerbar{margin-left:15px;background-image:linear-gradient(#8888ff,#ff8888);padding:0px;display:inline-block;}
 #headerbar h1{width:100%;padding-top:30px;padding-left:30px;padding-bottom:10px;color:#000;display:inline-block;background:#fff;mix-blend-mode:screen;font-family:'Montserrat',sans-serif}
 #headerbar h3{color:#000;display:inline-block;padding-left:30px;background:#fff;mix-blend-mode:screen;font-family:'Montserrat',sans-serif}
-body{background-size:cover;background-repeat:no-repeat;background-image:linear-gradient(#9999ff,#ff9999);height:100vh}
+body{background-size:cover;background-repeat:no-repeat;background-image:linear-gradient(#9999ff,#ff9999);height:100%}
 #subheader{max-width:150px;min-width:150px;background-image:linear-gradient(#8888ff,#ff8888);margin-top:30px;height:100%;margin-right:30px;}
 #subheadercover{height:100%;background:#fff;mix-blend-mode:screen;max-width:200px;}
 #subheadercover a{display:inline-block;vertical-align:middle;text-decoration:none;}
