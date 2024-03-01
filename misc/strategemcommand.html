@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>Strategem Command</title>
+    <style> *{margin:0px;background-color:#000; color:#fff;}
+    select {width:10vw;}</style>
+  </head>
+  <body>
+    <center><h1>Death Death Revolution</h1><h4>Choose your Strategems</h4>
+    <span><select id="strat1" onchange="newStrategemList()" value = "2"></select>
+    <select id="strat2" onchange="newStrategemList()" value = "11"></select>
+    <select id="strat3" onchange="newStrategemList()" value="42"></select>
+    <select id="strat4" value="19" onchange="newStrategemList()"></select>
+    <button onclick="toggleHardMode()">Toggle Hard Mode</button></span></center>
+    <center><h1 id="stratname"></h3><h4 id="progress"></h4></center>
+   <canvas id = "canvas" style = "width:80vw; height:60vh; padding:2vh 10vw" onLoad = "prepCanvas" tabindex = 1></canvas>
+    <footer></footer>
+
+    <script>
+    var supply = ["Machine Gun", "Anti-Materiel Rifle", "Stalwart", "Expendable Anti-Tank", "Recoilless Rifle", "Flamethrower", "Autocannon", "Railgun", "Spear"];
+    var supplyCodes = ["saswd", "sadws", "saswwa","ssawd", "sadda", "sawsw", "saswwd", "sdswad", "sswss"];
+
+    var cannons = ["Orbital Gatling Barrage", "Orbital Airburst Strike", "Orbital 120MM HE Barrage", "Orbital 380MM HE Barrage", "Orbital Walking Barrage", "Orbital Laser", "Orbital Railcannon Strike"];
+    var cannonCodes = ["dsaww", "ddd", "ddsads", "dswwass", "dsdsds", "dswds", "dwssd"];
+
+    var hangars = ["Eagle Strafing Run", "Eagle Airstrike", "Eagle Cluster Bomb", "Eagle Napalm Airstrike","Jump Pack", "Eagle Smoke Strike", "Eagle 110MM Rocket Pods", "Eagle 500KG Bomb"];
+    var hangarCodes = ["wdd", "wdsd", "wdssd", "wdsw", "swwsw", "wdws", "wdwa", "wdsss"];
+
+    var bridge = ["Orbital Precision Strike", "Orbital Gas Strike", "Orbital EMS Strike", "Orbital Smoke Strike", "HMG Emplacement", "Shield Generator Relay", "Tesla Tower"];
+    var bridgeCodes = ["ddw", "ddsd", "ddas", "ddsw", "swadda","ssadad", "swdwad"];
+
+    var engi = ["Anti-Personnel Minefield", "Supply Pack", "Grenade Launcher", "Laser Cannon", "Incendiary Mines", "'Guard Dog' Rover", "Ballistic Shield Backpack", "Arc Thrower", "Shield Generator Pack"];
+    var engiCodes = ["sawd", "saswws", "sawas", "saswa", "saas", "swawdd", "sasswa", "sdswaa", "swadad"];
+
+    var robots = ["Machine Gun Sentry", "Gatling Sentry", "Mortar Sentry", "'Guard Dog'", "Autocannon Sentry", "Rocket Sentry", "EMS Mortar Sentry"];
+    var robotCodes = ["swddw", "swda", "swdds", "swawds", "swdaw", "swdda", "swdsd"];
+
+    var reinforceCode = "wsdaw";
+    var resupplyCode = "sswd";
+
+    var masterList = ["Reinforce", "Resupply"];
+    var masterCodeList = [reinforceCode, resupplyCode];
+    masterList = masterList.concat(supply);
+    masterList = masterList.concat(cannons);
+    masterList = masterList.concat(hangars);
+    masterList = masterList.concat(bridge);
+    masterList = masterList.concat(engi);
+    masterList = masterList.concat(robots);
+
+    masterCodeList = masterCodeList.concat(supplyCodes);
+    masterCodeList = masterCodeList.concat( cannonCodes);
+    masterCodeList = masterCodeList.concat( hangarCodes);
+    masterCodeList = masterCodeList.concat( bridgeCodes);
+    masterCodeList = masterCodeList.concat( engiCodes);
+    masterCodeList = masterCodeList.concat( robotCodes);
+
+
+    document.getElementById("strat1").innerHTML = strategemListHTML();
+    document.getElementById("strat2").innerHTML = strategemListHTML();
+    document.getElementById("strat3").innerHTML = strategemListHTML();
+    document.getElementById("strat4").innerHTML = strategemListHTML();
+    document.getElementById("strat1").value = 2;
+    document.getElementById("strat2").value = 11;
+    document.getElementById("strat3").value = 19;
+    document.getElementById("strat4").value = 42;
+    var can = document.getElementById("canvas");
+    var ctx = can.getContext("2d");
+    var hardMode = 0;
+    can.addEventListener("keydown", advanceStrategem);
+
+    var activeStrategemList = [0, 1, 2, 11, 19, 42];
+
+    stratWidth = 20
+    padding = 10
+    stratHeight = stratWidth + (2 * padding)
+    var currentStrategemId = 0;
+    var currentCompletion = 0;
+    window.onLoad = drawStrategem();
+
+    function advanceStrategem(event) {
+
+      //keynum = event.which;
+      if (event.key === masterCodeList[currentStrategemId][currentCompletion]) {
+        currentCompletion++;
+      } else {
+        currentCompletion = 0;
+      }
+
+      if (currentCompletion == masterCodeList[currentStrategemId].length) {
+        currentCompletion = 0;
+        newStrategem = activeStrategemList[Math.floor(Math.random() * activeStrategemList.length)];
+        while (currentStrategemId == newStrategem) {
+          newStrategem = activeStrategemList[Math.floor(Math.random() * activeStrategemList.length)];
+        }
+        currentStrategemId = newStrategem;
+      }
+
+      drawStrategem(currentCompletion)
+
+    }
+
+    function newStrategemList() {
+      activeStrategemList = [0, 1];
+      activeStrategemList.push(document.getElementById("strat1").value);
+      activeStrategemList.push(document.getElementById("strat2").value);
+      activeStrategemList.push(document.getElementById("strat3").value);
+      activeStrategemList.push(document.getElementById("strat4").value);
+
+      newStrategem = activeStrategemList[Math.floor(Math.random() * activeStrategemList.length)];
+      while (currentStrategemId == newStrategem) {
+        newStrategem = activeStrategemList[Math.floor(Math.random() * activeStrategemList.length)];
+      }
+      currentStrategemId = newStrategem;
+
+      currentCompletion = 0;
+      drawStrategem();
+    }
+
+    function strategemListHTML() {
+    innerHTML = "";
+    innerHTML += "<optgroup label = 'Supply Strategems'>";
+    currentCount = 2;
+    for (let i = 0; i < supply.length; i++) {
+      innerHTML += "<option value = '" + currentCount + "'>" + supply[i] + "</option>";
+      currentCount++;
+    }
+    innerHTML += "</optgroup>"
+
+    innerHTML += "<optgroup label = 'Orbital Cannon Strategems'>";
+    for (let i = 0; i < cannons.length; i++) {
+      innerHTML += "<option value = '" + currentCount + "'>" + cannons[i] + "</option>";
+      currentCount++;
+    }
+    innerHTML += "</optgroup>"
+
+    innerHTML += "<optgroup label = 'Eagle Strategems'>";
+    for (let i = 0; i < hangars.length; i++) {
+      innerHTML += "<option value = '" + currentCount + "'>" + hangars[i] + "</option>";
+      currentCount++;
+    }
+    innerHTML += "</optgroup>"
+
+    innerHTML += "<optgroup label = 'Bridge  Strategems'>";
+    for (let i = 0; i < bridge.length; i++) {
+      innerHTML += "<option value = '" + currentCount + "'>" + bridge[i] + "</option>";
+      currentCount++;
+    }
+    innerHTML += "</optgroup>"
+
+    innerHTML += "<optgroup label = 'Engineering  Strategems'>";
+    for (let i = 0; i < engi.length; i++) {
+      innerHTML += "<option value = '" + currentCount + "'>" + engi[i] + "</option>";
+      currentCount++;
+    }
+    innerHTML += "</optgroup>"
+
+  innerHTML += "<optgroup label = 'Robotics  Strategems'>";
+    for (let i = 0; i < robots.length; i++) {
+      innerHTML += "<option value = '" + currentCount + "'>" + robots[i] + "</option>";
+      currentCount++;
+    }
+    innerHTML += "</optgroup>"
+    return innerHTML;
+    }
+
+    function prepCanvas() {
+      ctx.fillStyle = `rgb(0, 0, 0)`;
+      ctx.fillRect(0, 0, can.width, can.height);
+    }
+
+    function toggleHardMode() {
+      hardMode = 1 - hardMode;
+      drawStrategem();
+    }
+
+
+    function drawStrategem(numCorrect = 0) {
+      prepCanvas();
+      document.getElementById("stratname").innerHTML = masterList[currentStrategemId];
+      document.getElementById("progress").innerHTML = currentCompletion + "/" + masterCodeList[currentStrategemId].length;
+      if (hardMode) {
+        return;
+      }
+      dirList = masterCodeList[currentStrategemId];
+      name = masterList[currentStrategemId];
+
+
+      ctx.fillStyle = `rgb(0, 0, 0)`;
+      ctx.fillRect(0, 0, can.width, can.height);
+      ctx.fillStyle = `rgb(255, 255, 255)`;
+
+      //Calculate start X via centering
+      stratWidth = 20;
+      padding = 10;
+      stratHeight = stratWidth + (2 * padding);
+
+      topAlign = (can.height - stratHeight) / 2;
+      unitWidth = stratWidth + (2 * padding)
+      leftAlign = (can.width - (unitWidth * dirList.length)) / 2;
+
+      if (leftAlign < 0) {
+        stratWidth =  0.66 * can.width / dirList.length
+        padding = stratWidth * 0.5
+        stratHeight = stratWidth + (2 * padding)
+        topAlign = (can.height - stratHeight) / 2;
+      unitWidth = stratWidth + (2 * padding)
+      leftAlign = (can.width - (unitWidth * dirList.length)) / 2;
+
+      }
+
+      for (let i = 0; i < dirList.length; i++) {
+        if (i >= numCorrect) {
+          ctx.fillStyle = `rgb(100, 100, 100)`;
+        }
+        if (dirList[i] === "w") {
+          ctx.fillRect(leftAlign + (unitWidth * i) + padding + stratWidth * (0.25), topAlign + (0.3) * stratHeight, stratWidth * (0.5), (0.7) * stratHeight);
+
+
+          ctx.beginPath();
+          ctx.moveTo(leftAlign + (unitWidth * i) + padding, topAlign + (0.3) * stratHeight);
+          ctx.lineTo(leftAlign + (unitWidth * i) + padding + stratWidth * (0.5), topAlign);
+          ctx.lineTo(leftAlign + (unitWidth * i) + stratWidth + padding, topAlign + (0.3) * stratHeight);
+
+          ctx.closePath();
+          ctx.fill();
+
+        }
+
+        if (dirList[i] === "s") {
+          ctx.fillRect(leftAlign + (unitWidth * i) + padding + stratWidth * (0.25), topAlign, stratWidth * (0.5), (0.7) * stratHeight);
+
+
+          ctx.beginPath();
+          ctx.moveTo(leftAlign + (unitWidth * i) + padding, topAlign + (0.7) * stratHeight);
+          ctx.lineTo(leftAlign + (unitWidth * i) + padding + stratWidth * (0.5), topAlign + stratHeight);
+          ctx.lineTo(leftAlign + (unitWidth * i) + stratWidth + padding, topAlign + (0.7) * stratHeight);
+
+          ctx.closePath();
+          ctx.fill();
+
+        }
+
+        if (dirList[i] === "a") {
+          ctx.fillRect(leftAlign + (unitWidth * i) + (0.2) * stratHeight, topAlign + padding + (0.25) * stratWidth, (0.7) * stratHeight, stratWidth * (0.5));
+
+
+          ctx.beginPath();
+          ctx.moveTo(leftAlign + (unitWidth * i) + 0.2 * stratHeight, topAlign + padding);
+          ctx.lineTo(leftAlign + (unitWidth * i), topAlign + padding + 0.5 * stratWidth);
+          ctx.lineTo(leftAlign + (unitWidth * i) + 0.2 * stratHeight, topAlign + padding + stratWidth);
+
+          ctx.closePath();
+          ctx.fill();
+
+        }
+
+        if (dirList[i] === "d") {
+          ctx.fillRect(leftAlign + (unitWidth * i), topAlign + padding + (0.25) * stratWidth, (0.7) * stratHeight, stratWidth * (0.5));
+
+
+          ctx.beginPath();
+          ctx.moveTo(leftAlign + (unitWidth * i) + 0.6 * stratHeight, topAlign + padding);
+          ctx.lineTo(leftAlign + (unitWidth * i) + stratHeight, topAlign + padding + 0.5 * stratWidth);
+          ctx.lineTo(leftAlign + (unitWidth * i) + 0.6 * stratHeight, topAlign + padding + stratWidth);
+
+          ctx.closePath();
+          ctx.fill();
+
+        }
+
+
+      }
+    }
+
+    </script>
+  </body>
+</html>
